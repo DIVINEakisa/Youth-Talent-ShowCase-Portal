@@ -4,9 +4,22 @@
 -- Database: youth_talent_portal
 -- ============================================================
 
-DROP DATABASE IF EXISTS youth_talent_portal;
-CREATE DATABASE youth_talent_portal CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- Note: If DROP DATABASE is disabled, manually create database first:
+-- CREATE DATABASE IF NOT EXISTS youth_talent_portal CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- DROP DATABASE IF EXISTS youth_talent_portal;
+-- CREATE DATABASE youth_talent_portal CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE youth_talent_portal;
+
+-- Drop existing tables in correct order (respecting foreign keys)
+DROP TABLE IF EXISTS user_badges;
+DROP TABLE IF EXISTS reports;
+DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS ratings;
+DROP TABLE IF EXISTS talents;
+DROP TABLE IF EXISTS badges;
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS users;
 
 -- ============================================================
 -- Table: users
@@ -259,6 +272,140 @@ INSERT INTO user_badges (user_id, badge_id) VALUES
 (3, 1),
 (5, 1),
 (2, 2);
+
+-- ============================================================
+-- Additional Sample Data for Realistic Testing
+-- ============================================================
+
+-- Insert More Users (Password for all: password123)
+INSERT INTO users (username, email, password_hash, full_name, role, bio) VALUES
+('emily_chen', 'emily@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Emily Chen', 'USER', 'Tech enthusiast and coding wizard'),
+('michael_brown', 'michael@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Michael Brown', 'USER', 'Writer and storyteller with a passion for fantasy'),
+('alex_kumar', 'alex@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Alex Kumar', 'USER', 'Entrepreneur and business innovator'),
+('lisa_taylor', 'lisa@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Lisa Taylor', 'USER', 'Professional artist and graphic designer'),
+('david_wilson', 'david@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'David Wilson', 'USER', 'Musician, producer, and sound engineer'),
+('sophia_garcia', 'sophia@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Sophia Garcia', 'USER', 'Innovation enthusiast and problem solver'),
+('ryan_martinez', 'ryan@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Ryan Martinez', 'USER', 'Full-stack developer and open-source contributor'),
+('olivia_lee', 'olivia@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Olivia Lee', 'USER', 'Digital artist specializing in character design'),
+('james_anderson', 'james@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'James Anderson', 'USER', 'Poet and creative writing instructor'),
+('emma_thomas', 'emma@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Emma Thomas', 'USER', 'Young entrepreneur building sustainable businesses');
+
+-- Insert More Talents Across Different Categories
+INSERT INTO talents (user_id, category_id, title, description, image_url, media_url, status, approved_by, approved_at) VALUES
+-- Music Talents
+(10, 1, 'Electronic Music Production', 'An original EDM track produced using Ableton Live, featuring dynamic beats and melodic synths.', 'edm-track.jpg', 'https://soundcloud.com/example', 'APPROVED', 1, NOW()),
+(10, 1, 'Acoustic Guitar Cover Album', 'A collection of popular song covers played on acoustic guitar with unique arrangements.', 'guitar-covers.jpg', 'https://youtube.com/watch?v=example2', 'APPROVED', 1, NOW()),
+(2, 1, 'Jazz Improvisation Session', 'Live jazz improvisation showcasing creative musical expression and technical skill.', 'jazz-improv.jpg', 'https://youtube.com/watch?v=example3', 'APPROVED', 1, NOW()),
+
+-- Art Talents
+(9, 2, 'Abstract Watercolor Series', 'A series of abstract watercolor paintings inspired by natural landscapes and emotions.', 'watercolor-abstract.jpg', NULL, 'APPROVED', 1, NOW()),
+(13, 2, '3D Character Design Portfolio', 'A portfolio of 3D character models created for games and animation projects.', '3d-characters.jpg', 'https://artstation.com/example', 'APPROVED', 1, NOW()),
+(9, 2, 'Street Art Photography', 'A photo collection documenting urban street art and graffiti culture around the city.', 'street-art-photos.jpg', NULL, 'APPROVED', 1, NOW()),
+(2, 2, 'Minimalist Logo Design Collection', 'A showcase of minimalist logo designs for various brands and startups.', 'logo-designs.jpg', NULL, 'PENDING', NULL, NULL),
+
+-- Coding Talents
+(6, 3, 'E-Commerce Website with React', 'A fully functional e-commerce website built with React, Node.js, and MongoDB.', 'ecommerce-app.jpg', 'https://github.com/example/ecommerce', 'APPROVED', 1, NOW()),
+(12, 3, 'Mobile Fitness Tracking App', 'An Android app that tracks workouts, calories, and provides personalized fitness plans.', 'fitness-app.jpg', 'https://github.com/example/fitness-tracker', 'APPROVED', 1, NOW()),
+(6, 3, 'Python Data Visualization Tool', 'A Python tool for visualizing complex datasets with interactive charts and graphs.', 'data-viz.jpg', 'https://github.com/example/data-viz', 'APPROVED', 1, NOW()),
+(12, 3, 'Blockchain Voting System', 'A secure and transparent voting system built on blockchain technology.', 'blockchain-vote.jpg', 'https://github.com/example/blockchain-vote', 'PENDING', NULL, NULL),
+
+-- Writing Talents
+(7, 4, 'Science Fiction Short Story', 'A thrilling sci-fi short story set in a dystopian future where AI controls society.', 'scifi-story.jpg', NULL, 'APPROVED', 1, NOW()),
+(14, 4, 'Modern Poetry Anthology', 'An anthology of modern poems exploring themes of identity, love, and social justice.', 'poetry-anthology.jpg', NULL, 'APPROVED', 1, NOW()),
+(7, 4, 'Travel Blog Series', 'A series of travel blog posts documenting adventures across different countries and cultures.', 'travel-blog.jpg', NULL, 'APPROVED', 1, NOW()),
+(14, 4, 'Fantasy Novel Excerpt', 'The first three chapters of an epic fantasy novel featuring magic, adventure, and dragons.', 'fantasy-novel.jpg', NULL, 'APPROVED', 1, NOW()),
+
+-- Innovation Talents
+(11, 5, 'Solar-Powered Water Purifier', 'An innovative device that purifies water using solar energy, designed for rural areas.', 'water-purifier.jpg', NULL, 'APPROVED', 1, NOW()),
+(3, 5, 'Smart Home Automation System', 'An IoT-based home automation system controllable via smartphone app.', 'smart-home.jpg', 'https://github.com/example/smart-home', 'APPROVED', 1, NOW()),
+(11, 5, 'Eco-Friendly Packaging Solution', 'Biodegradable packaging materials made from agricultural waste.', 'eco-packaging.jpg', NULL, 'APPROVED', 1, NOW()),
+(6, 5, 'AI-Powered Plant Disease Detector', 'A machine learning model that identifies plant diseases from leaf images.', 'plant-detector.jpg', 'https://github.com/example/plant-ai', 'PENDING', NULL, NULL),
+
+-- Entrepreneurship Talents
+(8, 6, 'Online Tutoring Platform Concept', 'A business plan for connecting students with qualified tutors for personalized learning.', 'tutoring-platform.jpg', NULL, 'APPROVED', 1, NOW()),
+(15, 6, 'Sustainable Fashion Startup', 'A startup idea focused on creating eco-friendly clothing from recycled materials.', 'sustainable-fashion.jpg', NULL, 'APPROVED', 1, NOW()),
+(8, 6, 'Local Food Delivery Network', 'A business model for connecting local farms directly with urban consumers.', 'food-delivery.jpg', NULL, 'APPROVED', 1, NOW()),
+(15, 6, 'Youth Skill Development Center', 'A proposal for a community center offering free skill training for underprivileged youth.', 'skill-center.jpg', NULL, 'PENDING', NULL, NULL);
+
+-- Insert More Ratings (Making the platform more active)
+INSERT INTO ratings (talent_id, user_id, rating_value) VALUES
+-- Music ratings
+(7, 2, 5), (7, 3, 5), (7, 5, 4), (7, 6, 5),
+(8, 3, 4), (8, 5, 5), (8, 6, 4), (8, 7, 5),
+(9, 5, 5), (9, 6, 5), (9, 7, 4),
+-- Art ratings
+(10, 2, 4), (10, 3, 5), (10, 6, 4), (10, 7, 5),
+(11, 2, 5), (11, 5, 5), (11, 6, 5), (11, 8, 4),
+(12, 3, 4), (12, 5, 5), (12, 7, 4),
+-- Coding ratings
+(14, 2, 5), (14, 5, 5), (14, 7, 4), (14, 8, 5),
+(15, 3, 5), (15, 6, 4), (15, 7, 5), (15, 10, 5),
+(16, 2, 4), (16, 5, 5), (16, 8, 4),
+-- Writing ratings
+(18, 2, 5), (18, 3, 4), (18, 6, 5), (18, 10, 5),
+(19, 5, 5), (19, 6, 5), (19, 8, 4), (19, 11, 5),
+(20, 2, 4), (20, 7, 5), (20, 10, 4),
+(21, 3, 5), (21, 6, 5), (21, 11, 5),
+-- Innovation ratings
+(22, 2, 5), (22, 3, 5), (22, 7, 5), (22, 12, 4),
+(23, 5, 5), (23, 6, 4), (23, 10, 5), (23, 12, 5),
+(24, 2, 4), (24, 7, 5), (24, 11, 5),
+-- Entrepreneurship ratings
+(26, 2, 4), (26, 3, 5), (26, 6, 4), (26, 13, 5),
+(27, 5, 5), (27, 7, 5), (27, 10, 4), (27, 13, 5),
+(28, 2, 5), (28, 6, 4), (28, 11, 5);
+
+-- Insert More Comments (Making the community more engaging)
+INSERT INTO comments (talent_id, user_id, comment_text) VALUES
+-- Music comments
+(7, 3, 'This EDM track is amazing! The drop is incredible.'),
+(7, 5, 'Love the energy in this track. Would love to hear more!'),
+(8, 2, 'Your acoustic covers are so soothing. Beautiful work!'),
+(8, 6, 'The arrangement is unique and refreshing. Keep it up!'),
+(9, 5, 'Jazz improvisation at its finest! You have real talent.'),
+-- Art comments
+(10, 2, 'The colors and composition are stunning. Very inspiring!'),
+(10, 6, 'Your watercolor technique is impressive. Love the abstract style.'),
+(11, 5, 'These 3D character designs are professional quality. Amazing!'),
+(11, 8, 'The level of detail in each character is incredible.'),
+(12, 3, 'Great eye for capturing street art. These photos tell a story.'),
+-- Coding comments
+(14, 5, 'This e-commerce site is well-built and user-friendly. Great job!'),
+(14, 7, 'Clean code and good UI/UX design. Impressive project!'),
+(15, 3, 'This fitness app would be really useful. Hope to see it launched!'),
+(15, 10, 'Love the features! The UI is intuitive and motivating.'),
+(16, 2, 'Excellent data visualization capabilities. Very useful tool!'),
+-- Writing comments
+(18, 2, 'This sci-fi story is gripping! Can\'t wait to read more.'),
+(18, 6, 'The world-building is excellent. You have a gift for storytelling.'),
+(19, 5, 'Your poems are so powerful and thought-provoking.'),
+(19, 11, 'Beautiful use of language. Each poem resonates deeply.'),
+(20, 7, 'Your travel stories make me want to pack my bags and go!'),
+(21, 6, 'The fantasy world you created is vivid and captivating.'),
+-- Innovation comments
+(22, 2, 'This solar water purifier could help so many communities. Brilliant!'),
+(22, 7, 'Innovative and practical solution. Hope this gets implemented!'),
+(23, 5, 'Smart home automation is the future. Great implementation!'),
+(24, 7, 'Eco-friendly packaging is so needed. Excellent initiative!'),
+-- Entrepreneurship comments
+(26, 2, 'This tutoring platform idea is solid. I would definitely use it!'),
+(26, 13, 'Great business plan with clear value proposition.'),
+(27, 5, 'Sustainable fashion is important. Love this startup idea!'),
+(28, 11, 'Local food delivery would benefit both farmers and consumers. Great!');
+
+-- Insert Sample Reports (Testing moderation system)
+INSERT INTO reports (reporter_id, reported_item_type, reported_item_id, report_reason, status) VALUES
+(5, 'COMMENT', 8, 'This comment contains spam links', 'PENDING'),
+(7, 'TALENT', 13, 'Inappropriate content for youth platform', 'PENDING'),
+(10, 'COMMENT', 15, 'Offensive language used', 'REVIEWED');
+
+-- Award More Badges to Active Users
+INSERT INTO user_badges (user_id, badge_id) VALUES
+(6, 1), (7, 1), (8, 1), (9, 1), (10, 1),
+(11, 1), (12, 1), (13, 1), (14, 1), (15, 1),
+(3, 2), (6, 2), (10, 2),
+(2, 3), (6, 3), (10, 3),
+(3, 4), (5, 4);
 
 -- ============================================================
 -- Indexes for Performance Optimization
