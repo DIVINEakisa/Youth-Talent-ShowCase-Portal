@@ -4,11 +4,8 @@
 -- Database: youth_talent_portal
 -- ============================================================
 
--- Note: If DROP DATABASE is disabled, manually create database first:
--- CREATE DATABASE IF NOT EXISTS youth_talent_portal CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- DROP DATABASE IF EXISTS youth_talent_portal;
--- CREATE DATABASE youth_talent_portal CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- Create database if it doesn't exist
+CREATE DATABASE IF NOT EXISTS youth_talent_portal CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE youth_talent_portal;
 
 -- Drop existing tables in correct order (respecting foreign keys)
