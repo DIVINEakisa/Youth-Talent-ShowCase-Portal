@@ -8,7 +8,6 @@ import com.youthtalent.util.ValidationUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.List;
  * Talent Servlet
  * Handles talent CRUD operations
  */
-@WebServlet("/talent/*")
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
                  maxFileSize = 1024 * 1024 * 10,      // 10MB
                  maxRequestSize = 1024 * 1024 * 50)   // 50MB

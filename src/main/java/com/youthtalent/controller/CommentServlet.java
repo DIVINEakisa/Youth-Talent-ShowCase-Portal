@@ -7,7 +7,6 @@ import com.youthtalent.model.Talent;
 import com.youthtalent.util.ValidationUtil;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,7 +16,6 @@ import java.util.List;
  * Comment Servlet
  * Handles comment operations
  */
-@WebServlet("/comment/*")
 public class CommentServlet extends HttpServlet {
     
     private CommentDAO commentDAO;

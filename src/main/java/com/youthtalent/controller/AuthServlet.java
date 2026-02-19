@@ -6,7 +6,6 @@ import com.youthtalent.util.PasswordUtil;
 import com.youthtalent.util.ValidationUtil;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 
@@ -14,7 +13,6 @@ import java.io.IOException;
  * Authentication Servlet
  * Handles user login and registration
  */
-@WebServlet("/auth/*")
 public class AuthServlet extends HttpServlet {
     
     private UserDAO userDAO;

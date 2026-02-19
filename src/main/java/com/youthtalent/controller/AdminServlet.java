@@ -5,7 +5,6 @@ import com.youthtalent.model.Talent;
 import com.youthtalent.model.Report;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
@@ -14,7 +13,6 @@ import java.util.List;
  * Admin Servlet
  * Handles admin operations including talent approval workflow
  */
-@WebServlet("/admin/*")
 public class AdminServlet extends HttpServlet {
     
     private TalentDAO talentDAO;

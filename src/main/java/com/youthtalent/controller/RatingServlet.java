@@ -7,7 +7,6 @@ import com.youthtalent.model.Talent;
 import com.youthtalent.util.ValidationUtil;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,7 +15,6 @@ import java.io.PrintWriter;
  * Rating Servlet
  * Handles talent rating operations
  */
-@WebServlet("/rating/*")
 public class RatingServlet extends HttpServlet {
     
     private RatingDAO ratingDAO;
