@@ -74,39 +74,55 @@ public class AuthServlet extends HttpServlet {
      */
     private void handleLogin(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        
-        // Validation
-        if (!ValidationUtil.isNotEmpty(username) || !ValidationUtil.isNotEmpty(password)) {
-            request.setAttribute("error", "Username and password are required");
-            request.getRequestDispatcher("/login.jsp").forward(request, response);
-            return;
-        }
-        
-        // Hash password
-        String passwordHash = PasswordUtil.hashPassword(password);
-        
-        // Authenticate user
-        User user = userDAO.authenticateUser(username, passwordHash);
-        
-        if (user != null) {
-            // Create session
-            HttpSession session = request.getSession();
-            session.setAttribute("user", user);
-            session.setAttribute("userId", user.getUserId());
-            session.setAttribute("username", user.getUsername());
-            session.setAttribute("role", user.getRole());
-            session.setMaxInactiveInterval(30 * 60); // 30 minutes
+        try {
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
             
-            // Redirect based on role
-            if (user.isAdmin()) {
-                response.sendRedirect(request.getContextPath() + "/admin/dashboard.jsp");
-            } else {
-                response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
+            System.out.println("DEBUG: Login attempt for username: " + username);
+            
+            // Validation
+            if (!ValidationUtil.isNotEmpty(username) || !ValidationUtil.isNotEmpty(password)) {
+                request.setAttribute("error", "Username and password are required");
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
+                return;
             }
-        } else {
-            request.setAttribute("error", "Invalid username or password");
+            
+            // Hash password
+            String passwordHash = PasswordUtil.hashPassword(password);
+            System.out.println("DEBUG: Password hash: " + passwordHash);
+            
+            // Authenticate user
+            User user = userDAO.authenticateUser(username, passwordHash);
+            System.out.println("DEBUG: Authentication result: " + (user != null ? "SUCCESS" : "FAILED"));
+            
+            if (user != null) {
+                System.out.println("DEBUG: User found: " + user.getUsername() + " (Role: " + user.getRole() + ")");
+                
+                // Create session
+                HttpSession session = request.getSession();
+                session.setAttribute("user", user);
+                session.setAttribute("userId", user.getUserId());
+                session.setAttribute("username", user.getUsername());
+                session.setAttribute("role", user.getRole());
+                session.setMaxInactiveInterval(30 * 60); // 30 minutes
+                
+                System.out.println("DEBUG: Session created, redirecting...");
+                
+                // Redirect based on role
+                if (user.isAdmin()) {
+                    response.sendRedirect(request.getContextPath() + "/admin/dashboard.jsp");
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
+                }
+            } else {
+                System.out.println("DEBUG: Authentication failed - no user found");
+                request.setAttribute("error", "Invalid username or password");
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
+            }
+        } catch (Exception e) {
+            System.err.println("ERROR in handleLogin: " + e.getMessage());
+            e.printStackTrace();
+            request.setAttribute("error", "Login error: " + e.getMessage());
             request.getRequestDispatcher("/login.jsp").forward(request, response);
         }
     }

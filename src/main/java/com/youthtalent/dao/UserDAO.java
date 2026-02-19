@@ -128,15 +128,22 @@ public class UserDAO {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
+            System.out.println("DEBUG UserDAO: Attempting authentication for: " + username);
+            System.out.println("DEBUG UserDAO: Password hash: " + passwordHash);
+            
             stmt.setString(1, username);
             stmt.setString(2, username);
             stmt.setString(3, passwordHash);
             ResultSet rs = stmt.executeQuery();
             
             if (rs.next()) {
+                System.out.println("DEBUG UserDAO: User found in database");
                 return extractUserFromResultSet(rs);
+            } else {
+                System.out.println("DEBUG UserDAO: No user found with provided credentials");
             }
         } catch (SQLException e) {
+            System.err.println("ERROR UserDAO: SQL Exception during authentication");
             e.printStackTrace();
         }
         return null;
