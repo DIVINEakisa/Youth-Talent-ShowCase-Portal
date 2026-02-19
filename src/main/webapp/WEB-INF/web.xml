@@ -72,4 +72,56 @@
         <mime-type>application/javascript</mime-type>
     </mime-mapping>
 
+    <!-- Servlet Declarations -->
+    <servlet>
+        <servlet-name>AuthServlet</servlet-name>
+        <servlet-class>com.youthtalent.controller.AuthServlet</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>TalentServlet</servlet-name>
+        <servlet-class>com.youthtalent.controller.TalentServlet</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>RatingServlet</servlet-name>
+        <servlet-class>com.youthtalent.controller.RatingServlet</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>CommentServlet</servlet-name>
+        <servlet-class>com.youthtalent.controller.CommentServlet</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>AdminServlet</servlet-name>
+        <servlet-class>com.youthtalent.controller.AdminServlet</servlet-class>
+    </servlet>
+
+    <!-- Servlet Mappings -->
+    <servlet-mapping>
+        <servlet-name>AuthServlet</servlet-name>
+        <url-pattern>/auth/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>TalentServlet</servlet-name>
+        <url-pattern>/talent/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>RatingServlet</servlet-name>
+        <url-pattern>/rating/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>CommentServlet</servlet-name>
+        <url-pattern>/comment/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>AdminServlet</servlet-name>
+        <url-pattern>/admin/*</url-pattern>
+    </servlet-mapping>
+
 </web-app>
