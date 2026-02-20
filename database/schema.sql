@@ -220,21 +220,21 @@ INSERT INTO categories (category_name, description, icon) VALUES
 
 -- Insert Admin User (Password: admin123)
 -- Password hash for 'admin123' using simple hashing (in real app, use BCrypt)
-INSERT INTO users (username, email, password_hash, full_name, role, bio) VALUES
-('admin', 'admin@youthtalent.com', '0192023a7bbd73250516f069df18b500', 'System Administrator', 'ADMIN', 'Platform administrator managing content and users'),
-('john_doe', 'john@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'John Doe', 'USER', 'Passionate musician and artist'),
-('jane_smith', 'jane@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Jane Smith', 'USER', 'Software developer and innovation enthusiast'),
-('mike_talent', 'mike@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Mike Johnson', 'TALENT_MANAGER', 'Talent manager helping youth showcase their skills'),
-('sarah_writer', 'sarah@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Sarah Williams', 'USER', 'Creative writer and storyteller');
+INSERT INTO users (username, email, password_hash, full_name, role, profile_image, bio) VALUES
+('admin', 'admin@youthtalent.com', '0192023a7bbd73250516f069df18b500', 'System Administrator', 'ADMIN', 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400', 'Platform administrator managing content and users'),
+('john_doe', 'john@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'John Doe', 'USER', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400', 'Passionate musician and artist'),
+('jane_smith', 'jane@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Jane Smith', 'USER', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400', 'Software developer and innovation enthusiast'),
+('mike_talent', 'mike@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Mike Johnson', 'TALENT_MANAGER', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400', 'Talent manager helping youth showcase their skills'),
+('sarah_writer', 'sarah@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Sarah Williams', 'USER', 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400', 'Creative writer and storyteller');
 
 -- Insert Sample Talents
 INSERT INTO talents (user_id, category_id, title, description, image_url, media_url, status, approved_by, approved_at) VALUES
-(2, 1, 'Original Piano Composition', 'An original piano piece composed and performed by me. This piece reflects themes of hope and resilience.', 'piano-composition.jpg', 'https://youtube.com/watch?v=example1', 'APPROVED', 1, NOW()),
-(2, 2, 'Digital Portrait Series', 'A series of digital portraits exploring human emotions using vibrant colors and modern techniques.', 'digital-portraits.jpg', 'https://instagram.com/example', 'APPROVED', 1, NOW()),
-(3, 3, 'AI-Powered Study Assistant', 'A web application that helps students organize their study schedule using machine learning algorithms.', 'study-assistant.jpg', 'https://github.com/example/study-assistant', 'APPROVED', 1, NOW()),
-(3, 5, 'Smart Recycling System', 'An IoT-based system that automatically sorts recyclable materials using computer vision.', 'recycling-system.jpg', 'https://github.com/example/smart-recycle', 'PENDING', NULL, NULL),
-(5, 4, 'Poetry Collection: Urban Dreams', 'A collection of poems about life in the modern city, exploring themes of connection and isolation.', 'poetry-book.jpg', NULL, 'APPROVED', 1, NOW()),
-(2, 6, 'Youth Mentorship Platform', 'A business proposal for connecting young entrepreneurs with experienced mentors in their field.', 'mentorship-platform.jpg', NULL, 'PENDING', NULL, NULL);
+(2, 1, 'Original Piano Composition', 'An original piano piece composed and performed by me. This piece reflects themes of hope and resilience.', 'https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=800', 'https://youtube.com/watch?v=example1', 'APPROVED', 1, NOW()),
+(2, 2, 'Digital Portrait Series', 'A series of digital portraits exploring human emotions using vibrant colors and modern techniques.', 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800', 'https://instagram.com/example', 'APPROVED', 1, NOW()),
+(3, 3, 'AI-Powered Study Assistant', 'A web application that helps students organize their study schedule using machine learning algorithms.', 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800', 'https://github.com/example/study-assistant', 'APPROVED', 1, NOW()),
+(3, 5, 'Smart Recycling System', 'An IoT-based system that automatically sorts recyclable materials using computer vision.', 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800', 'https://github.com/example/smart-recycle', 'PENDING', NULL, NULL),
+(5, 4, 'Poetry Collection: Urban Dreams', 'A collection of poems about life in the modern city, exploring themes of connection and isolation.', 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800', NULL, 'APPROVED', 1, NOW()),
+(2, 6, 'Youth Mentorship Platform', 'A business proposal for connecting young entrepreneurs with experienced mentors in their field.', 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800', NULL, 'PENDING', NULL, NULL);
 
 -- Insert Sample Ratings
 INSERT INTO ratings (talent_id, user_id, rating_value) VALUES
@@ -275,54 +275,54 @@ INSERT INTO user_badges (user_id, badge_id) VALUES
 -- ============================================================
 
 -- Insert More Users (Password for all: password123)
-INSERT INTO users (username, email, password_hash, full_name, role, bio) VALUES
-('emily_chen', 'emily@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Emily Chen', 'USER', 'Tech enthusiast and coding wizard'),
-('michael_brown', 'michael@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Michael Brown', 'USER', 'Writer and storyteller with a passion for fantasy'),
-('alex_kumar', 'alex@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Alex Kumar', 'USER', 'Entrepreneur and business innovator'),
-('lisa_taylor', 'lisa@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Lisa Taylor', 'USER', 'Professional artist and graphic designer'),
-('david_wilson', 'david@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'David Wilson', 'USER', 'Musician, producer, and sound engineer'),
-('sophia_garcia', 'sophia@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Sophia Garcia', 'USER', 'Innovation enthusiast and problem solver'),
-('ryan_martinez', 'ryan@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Ryan Martinez', 'USER', 'Full-stack developer and open-source contributor'),
-('olivia_lee', 'olivia@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Olivia Lee', 'USER', 'Digital artist specializing in character design'),
-('james_anderson', 'james@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'James Anderson', 'USER', 'Poet and creative writing instructor'),
-('emma_thomas', 'emma@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Emma Thomas', 'USER', 'Young entrepreneur building sustainable businesses');
+INSERT INTO users (username, email, password_hash, full_name, role, profile_image, bio) VALUES
+('emily_chen', 'emily@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Emily Chen', 'USER', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400', 'Tech enthusiast and coding wizard'),
+('michael_brown', 'michael@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Michael Brown', 'USER', 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400', 'Writer and storyteller with a passion for fantasy'),
+('alex_kumar', 'alex@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Alex Kumar', 'USER', 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=400', 'Entrepreneur and business innovator'),
+('lisa_taylor', 'lisa@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Lisa Taylor', 'USER', 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400', 'Professional artist and graphic designer'),
+('david_wilson', 'david@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'David Wilson', 'USER', 'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=400', 'Musician, producer, and sound engineer'),
+('sophia_garcia', 'sophia@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Sophia Garcia', 'USER', 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400', 'Innovation enthusiast and problem solver'),
+('ryan_martinez', 'ryan@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Ryan Martinez', 'USER', 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400', 'Full-stack developer and open-source contributor'),
+('olivia_lee', 'olivia@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Olivia Lee', 'USER', 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400', 'Digital artist specializing in character design'),
+('james_anderson', 'james@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'James Anderson', 'USER', 'https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=400', 'Poet and creative writing instructor'),
+('emma_thomas', 'emma@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Emma Thomas', 'USER', 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400', 'Young entrepreneur building sustainable businesses');
 
 -- Insert More Talents Across Different Categories
 INSERT INTO talents (user_id, category_id, title, description, image_url, media_url, status, approved_by, approved_at) VALUES
 -- Music Talents
-(10, 1, 'Electronic Music Production', 'An original EDM track produced using Ableton Live, featuring dynamic beats and melodic synths.', 'edm-track.jpg', 'https://soundcloud.com/example', 'APPROVED', 1, NOW()),
-(10, 1, 'Acoustic Guitar Cover Album', 'A collection of popular song covers played on acoustic guitar with unique arrangements.', 'guitar-covers.jpg', 'https://youtube.com/watch?v=example2', 'APPROVED', 1, NOW()),
-(2, 1, 'Jazz Improvisation Session', 'Live jazz improvisation showcasing creative musical expression and technical skill.', 'jazz-improv.jpg', 'https://youtube.com/watch?v=example3', 'APPROVED', 1, NOW()),
+(10, 1, 'Electronic Music Production', 'An original EDM track produced using Ableton Live, featuring dynamic beats and melodic synths.', 'https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=800', 'https://soundcloud.com/example', 'APPROVED', 1, NOW()),
+(10, 1, 'Acoustic Guitar Cover Album', 'A collection of popular song covers played on acoustic guitar with unique arrangements.', 'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=800', 'https://youtube.com/watch?v=example2', 'APPROVED', 1, NOW()),
+(2, 1, 'Jazz Improvisation Session', 'Live jazz improvisation showcasing creative musical expression and technical skill.', 'https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=800', 'https://youtube.com/watch?v=example3', 'APPROVED', 1, NOW()),
 
 -- Art Talents
-(9, 2, 'Abstract Watercolor Series', 'A series of abstract watercolor paintings inspired by natural landscapes and emotions.', 'watercolor-abstract.jpg', NULL, 'APPROVED', 1, NOW()),
-(13, 2, '3D Character Design Portfolio', 'A portfolio of 3D character models created for games and animation projects.', '3d-characters.jpg', 'https://artstation.com/example', 'APPROVED', 1, NOW()),
-(9, 2, 'Street Art Photography', 'A photo collection documenting urban street art and graffiti culture around the city.', 'street-art-photos.jpg', NULL, 'APPROVED', 1, NOW()),
-(2, 2, 'Minimalist Logo Design Collection', 'A showcase of minimalist logo designs for various brands and startups.', 'logo-designs.jpg', NULL, 'PENDING', NULL, NULL),
+(9, 2, 'Abstract Watercolor Series', 'A series of abstract watercolor paintings inspired by natural landscapes and emotions.', 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=800', NULL, 'APPROVED', 1, NOW()),
+(13, 2, '3D Character Design Portfolio', 'A portfolio of 3D character models created for games and animation projects.', 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800', 'https://artstation.com/example', 'APPROVED', 1, NOW()),
+(9, 2, 'Street Art Photography', 'A photo collection documenting urban street art and graffiti culture around the city.', 'https://images.unsplash.com/photo-1536924940846-227afb31e2a5?w=800', NULL, 'APPROVED', 1, NOW()),
+(2, 2, 'Minimalist Logo Design Collection', 'A showcase of minimalist logo designs for various brands and startups.', 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800', NULL, 'PENDING', NULL, NULL),
 
 -- Coding Talents
-(6, 3, 'E-Commerce Website with React', 'A fully functional e-commerce website built with React, Node.js, and MongoDB.', 'ecommerce-app.jpg', 'https://github.com/example/ecommerce', 'APPROVED', 1, NOW()),
-(12, 3, 'Mobile Fitness Tracking App', 'An Android app that tracks workouts, calories, and provides personalized fitness plans.', 'fitness-app.jpg', 'https://github.com/example/fitness-tracker', 'APPROVED', 1, NOW()),
-(6, 3, 'Python Data Visualization Tool', 'A Python tool for visualizing complex datasets with interactive charts and graphs.', 'data-viz.jpg', 'https://github.com/example/data-viz', 'APPROVED', 1, NOW()),
-(12, 3, 'Blockchain Voting System', 'A secure and transparent voting system built on blockchain technology.', 'blockchain-vote.jpg', 'https://github.com/example/blockchain-vote', 'PENDING', NULL, NULL),
+(6, 3, 'E-Commerce Website with React', 'A fully functional e-commerce website built with React, Node.js, and MongoDB.', 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800', 'https://github.com/example/ecommerce', 'APPROVED', 1, NOW()),
+(12, 3, 'Mobile Fitness Tracking App', 'An Android app that tracks workouts, calories, and provides personalized fitness plans.', 'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800', 'https://github.com/example/fitness-tracker', 'APPROVED', 1, NOW()),
+(6, 3, 'Python Data Visualization Tool', 'A Python tool for visualizing complex datasets with interactive charts and graphs.', 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800', 'https://github.com/example/data-viz', 'APPROVED', 1, NOW()),
+(12, 3, 'Blockchain Voting System', 'A secure and transparent voting system built on blockchain technology.', 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800', 'https://github.com/example/blockchain-vote', 'PENDING', NULL, NULL),
 
 -- Writing Talents
-(7, 4, 'Science Fiction Short Story', 'A thrilling sci-fi short story set in a dystopian future where AI controls society.', 'scifi-story.jpg', NULL, 'APPROVED', 1, NOW()),
-(14, 4, 'Modern Poetry Anthology', 'An anthology of modern poems exploring themes of identity, love, and social justice.', 'poetry-anthology.jpg', NULL, 'APPROVED', 1, NOW()),
-(7, 4, 'Travel Blog Series', 'A series of travel blog posts documenting adventures across different countries and cultures.', 'travel-blog.jpg', NULL, 'APPROVED', 1, NOW()),
-(14, 4, 'Fantasy Novel Excerpt', 'The first three chapters of an epic fantasy novel featuring magic, adventure, and dragons.', 'fantasy-novel.jpg', NULL, 'APPROVED', 1, NOW()),
+(7, 4, 'Science Fiction Short Story', 'A thrilling sci-fi short story set in a dystopian future where AI controls society.', 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800', NULL, 'APPROVED', 1, NOW()),
+(14, 4, 'Modern Poetry Anthology', 'An anthology of modern poems exploring themes of identity, love, and social justice.', 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800', NULL, 'APPROVED', 1, NOW()),
+(7, 4, 'Travel Blog Series', 'A series of travel blog posts documenting adventures across different countries and cultures.', 'https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=800', NULL, 'APPROVED', 1, NOW()),
+(14, 4, 'Fantasy Novel Excerpt', 'The first three chapters of an epic fantasy novel featuring magic, adventure, and dragons.', 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800', NULL, 'APPROVED', 1, NOW()),
 
 -- Innovation Talents
-(11, 5, 'Solar-Powered Water Purifier', 'An innovative device that purifies water using solar energy, designed for rural areas.', 'water-purifier.jpg', NULL, 'APPROVED', 1, NOW()),
-(3, 5, 'Smart Home Automation System', 'An IoT-based home automation system controllable via smartphone app.', 'smart-home.jpg', 'https://github.com/example/smart-home', 'APPROVED', 1, NOW()),
-(11, 5, 'Eco-Friendly Packaging Solution', 'Biodegradable packaging materials made from agricultural waste.', 'eco-packaging.jpg', NULL, 'APPROVED', 1, NOW()),
-(6, 5, 'AI-Powered Plant Disease Detector', 'A machine learning model that identifies plant diseases from leaf images.', 'plant-detector.jpg', 'https://github.com/example/plant-ai', 'PENDING', NULL, NULL),
+(11, 5, 'Solar-Powered Water Purifier', 'An innovative device that purifies water using solar energy, designed for rural areas.', 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800', NULL, 'APPROVED', 1, NOW()),
+(3, 5, 'Smart Home Automation System', 'An IoT-based home automation system controllable via smartphone app.', 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800', 'https://github.com/example/smart-home', 'APPROVED', 1, NOW()),
+(11, 5, 'Eco-Friendly Packaging Solution', 'Biodegradable packaging materials made from agricultural waste.', 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800', NULL, 'APPROVED', 1, NOW()),
+(6, 5, 'AI-Powered Plant Disease Detector', 'A machine learning model that identifies plant diseases from leaf images.', 'https://images.unsplash.com/photo-1574169208507-84376144848b?w=800', 'https://github.com/example/plant-ai', 'PENDING', NULL, NULL),
 
 -- Entrepreneurship Talents
-(8, 6, 'Online Tutoring Platform Concept', 'A business plan for connecting students with qualified tutors for personalized learning.', 'tutoring-platform.jpg', NULL, 'APPROVED', 1, NOW()),
-(15, 6, 'Sustainable Fashion Startup', 'A startup idea focused on creating eco-friendly clothing from recycled materials.', 'sustainable-fashion.jpg', NULL, 'APPROVED', 1, NOW()),
-(8, 6, 'Local Food Delivery Network', 'A business model for connecting local farms directly with urban consumers.', 'food-delivery.jpg', NULL, 'APPROVED', 1, NOW()),
-(15, 6, 'Youth Skill Development Center', 'A proposal for a community center offering free skill training for underprivileged youth.', 'skill-center.jpg', NULL, 'PENDING', NULL, NULL);
+(8, 6, 'Online Tutoring Platform Concept', 'A business plan for connecting students with qualified tutors for personalized learning.', 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800', NULL, 'APPROVED', 1, NOW()),
+(15, 6, 'Sustainable Fashion Startup', 'A startup idea focused on creating eco-friendly clothing from recycled materials.', 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800', NULL, 'APPROVED', 1, NOW()),
+(8, 6, 'Local Food Delivery Network', 'A business model for connecting local farms directly with urban consumers.', 'https://images.unsplash.com/photo-1556740758-90de374c12ad?w=800', NULL, 'APPROVED', 1, NOW()),
+(15, 6, 'Youth Skill Development Center', 'A proposal for a community center offering free skill training for underprivileged youth.', 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800', NULL, 'PENDING', NULL, NULL);
 
 -- Insert More Ratings (Making the platform more active)
 INSERT INTO ratings (talent_id, user_id, rating_value) VALUES

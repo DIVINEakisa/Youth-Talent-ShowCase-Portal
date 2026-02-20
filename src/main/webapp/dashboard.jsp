@@ -51,6 +51,10 @@
         .talent-card {
             transition: transform 0.3s;
             height: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
         .talent-card:hover {
@@ -60,7 +64,20 @@
         
         .talent-image {
             height: 200px;
+            width: 100%;
             object-fit: cover;
+            display: block;
+        }
+        
+        .talent-image-placeholder {
+            height: 200px;
+            width: 100%;
+            background: linear-gradient(135deg, #198754, #146c43);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
         }
         
         .btn-green {
@@ -162,8 +179,20 @@
                 for (Talent talent : recentTalents) { %>
                 <div class="col-md-4">
                     <div class="card talent-card">
-                        <img src="${pageContext.request.contextPath}/images/<%= talent.getImageUrl() != null ? talent.getImageUrl() : "default-talent.jpg" %>" 
-                             class="card-img-top talent-image" alt="<%= talent.getTitle() %>">
+                        <% if (talent.getImageUrl() != null && !talent.getImageUrl().isEmpty()) { %>
+                            <img src="<%= talent.getImageUrl() %>" 
+                                 class="talent-image" 
+                                 alt="<%= talent.getTitle() %> - a <%= talent.getCategoryName() %> talent showcase"
+                                 loading="lazy"
+                                 onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="talent-image-placeholder" style="display: none;">
+                                <i class="fas fa-image"></i>
+                            </div>
+                        <% } else { %>
+                            <div class="talent-image-placeholder">
+                                <i class="fas fa-star"></i>
+                            </div>
+                        <% } %>
                         <div class="card-body">
                             <span class="badge bg-success mb-2"><%= talent.getCategoryName() %></span>
                             <h5 class="card-title"><%= talent.getTitle() %></h5>

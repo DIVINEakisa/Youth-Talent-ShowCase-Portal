@@ -84,7 +84,17 @@
             width: 60px;
             height: 60px;
             object-fit: cover;
-            border-radius: 5px;
+            border-radius: 8px;
+            display: block;
+        }
+        
+        .talent-thumbnail-placeholder {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
@@ -97,18 +107,28 @@
     }
     %>
     <%@ include file="includes/navbar.jsp" %>
+    <% 
+    @SuppressWarnings("unchecked")
+    List<Talent> talents = (List<Talent>) request.getAttribute("talents");
     
-    List<Talent> myTalents = (List<Talent>) request.getAttribute("myTalents");
-    Integer totalTalents = (Integer) request.getAttribute("totalTalents");
-    Integer approvedCount = (Integer) request.getAttribute("approvedCount");
-    Integer pendingCount = (Integer) request.getAttribute("pendingCount");
-    Integer rejectedCount = (Integer) request.getAttribute("rejectedCount");
+    // Calculate statistics
+    int totalTalents = 0;
+    int approvedCount = 0;
+    int pendingCount = 0;
+    int rejectedCount = 0;
     
-    // Default values if not set
-    if (totalTalents == null) totalTalents = myTalents != null ? myTalents.size() : 0;
-    if (approvedCount == null) approvedCount = 0;
-    if (pendingCount == null) pendingCount = 0;
-    if (rejectedCount == null) rejectedCount = 0;
+    if (talents != null) {
+        totalTalents = talents.size();
+        for (Talent talent : talents) {
+            if ("APPROVED".equals(talent.getStatus())) {
+                approvedCount++;
+            } else if ("PENDING".equals(talent.getStatus())) {
+                pendingCount++;
+            } else if ("REJECTED".equals(talent.getStatus())) {
+                rejectedCount++;
+            }
+        }
+    }
     %>
     
     <!-- Page Header -->
@@ -164,7 +184,7 @@
         
         <!-- Talents Table -->
         <div class="talent-table-card">
-            <% if (myTalents != null && !myTalents.isEmpty()) { %>
+            <% if (talents != null && !talents.isEmpty()) { %>
             <div class="table-responsive">
                 <table class="table table-hover align-middle">
                     <thead>
@@ -180,13 +200,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% for (Talent talent : myTalents) { %>
+                        <% for (Talent talent : talents) { %>
                         <tr>
                             <td>
                                 <% if (talent.getImageUrl() != null && !talent.getImageUrl().isEmpty()) { %>
-                                <img src="<%= talent.getImageUrl() %>" alt="<%= talent.getTitle() %>" class="talent-thumbnail">
+                                <img src="<%= talent.getImageUrl() %>" 
+                                     alt="<%= talent.getTitle() %> thumbnail" 
+                                     class="talent-thumbnail"
+                                     loading="lazy"
+                                     onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="talent-thumbnail-placeholder bg-success text-white" style="display: none;">
+                                    <i class="fas fa-image"></i>
+                                </div>
                                 <% } else { %>
-                                <div class="talent-thumbnail bg-success d-flex align-items-center justify-content-center text-white">
+                                <div class="talent-thumbnail-placeholder bg-success text-white">
                                     <i class="fas fa-star"></i>
                                 </div>
                                 <% } %>

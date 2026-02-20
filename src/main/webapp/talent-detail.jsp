@@ -34,8 +34,20 @@
             width: 100%;
             max-height: 500px;
             object-fit: cover;
-            border-radius: 10px;
+            border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: block;
+        }
+        
+        .talent-image-placeholder {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, var(--light-green), var(--primary-green));
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .rating-section {
@@ -174,10 +186,16 @@
             <div class="col-lg-8">
                 <!-- Talent Image/Media -->
                 <% if (talent.getImageUrl() != null && !talent.getImageUrl().isEmpty()) { %>
-                <img src="<%= talent.getImageUrl() %>" alt="<%= talent.getTitle() %>" class="talent-image">
+                <img src="<%= talent.getImageUrl() %>" 
+                     alt="<%= talent.getTitle() %> - <%= talent.getCategoryName() != null ? talent.getCategoryName() : "talent" %> showcase" 
+                     class="talent-image"
+                     loading="eager"
+                     onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="talent-image-placeholder" style="display: none;">
+                    <i class="fas fa-image" style="font-size: 5rem; color: white;"></i>
+                </div>
                 <% } else { %>
-                <div class="talent-image d-flex align-items-center justify-content-center" 
-                     style="background: linear-gradient(135deg, var(--light-green), var(--primary-green)); height: 400px;">
+                <div class="talent-image-placeholder">
                     <i class="fas fa-star" style="font-size: 5rem; color: white;"></i>
                 </div>
                 <% } %>

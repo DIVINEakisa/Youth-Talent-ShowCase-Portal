@@ -31,6 +31,8 @@
             height: 100%;
             border: none;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            overflow: hidden;
         }
         
         .talent-card:hover {
@@ -40,7 +42,14 @@
         
         .talent-image {
             height: 200px;
+            width: 100%;
             object-fit: cover;
+            display: block;
+        }
+        
+        .talent-image-placeholder {
+            height: 200px;
+            width: 100%;
             background: linear-gradient(135deg, var(--light-green), var(--primary-green));
             display: flex;
             align-items: center;
@@ -215,10 +224,16 @@
                 <div class="card talent-card">
                     <div class="position-relative">
                         <% if (talent.getImageUrl() != null && !talent.getImageUrl().isEmpty()) { %>
-                            <img src="<%= talent.getImageUrl() %>" class="card-img-top" alt="<%= talent.getTitle() %>" 
-                                 style="height: 200px; object-fit: cover;">
+                            <img src="<%= talent.getImageUrl() %>" 
+                                 class="talent-image" 
+                                 alt="<%= talent.getTitle() %> - a <%= talent.getCategoryName() != null ? talent.getCategoryName() : "talent" %> showcase by <%= talent.getUsername() != null ? talent.getUsername() : "anonymous" %>"
+                                 loading="lazy"
+                                 onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="talent-image-placeholder" style="display: none;">
+                                <i class="fas fa-image"></i>
+                            </div>
                         <% } else { %>
-                            <div class="talent-image">
+                            <div class="talent-image-placeholder">
                                 <i class="fas fa-star"></i>
                             </div>
                         <% } %>
