@@ -1,11 +1,6 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.youthtalent.model.User" %>
 <%
-    User user = (User) session.getAttribute("user");
-    if (user == null) {
-        response.sendRedirect(request.getContextPath() + "/auth/login");
-        return;
-    }
+    // User variable is expected to be declared in the parent JSP
     String currentPage = request.getParameter("page") != null ? request.getParameter("page") : "";
 %>
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #198754;">
@@ -18,18 +13,21 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
+                <% if (user != null) { %>
                 <li class="nav-item">
                     <a class="nav-link <%= "dashboard".equals(currentPage) ? "active" : "" %>" 
                        href="${pageContext.request.contextPath}/dashboard.jsp">
                         <i class="fas fa-home me-1"></i>Dashboard
                     </a>
                 </li>
+                <% } %>
                 <li class="nav-item">
                     <a class="nav-link <%= "talents".equals(currentPage) ? "active" : "" %>" 
                        href="${pageContext.request.contextPath}/talent/list">
                         <i class="fas fa-trophy me-1"></i>Explore Talents
                     </a>
                 </li>
+                <% if (user != null) { %>
                 <li class="nav-item">
                     <a class="nav-link <%= "mytalents".equals(currentPage) ? "active" : "" %>" 
                        href="${pageContext.request.contextPath}/talent/my-talents">
@@ -49,8 +47,10 @@
                     </a>
                 </li>
                 <% } %>
+                <% } %>
             </ul>
             <ul class="navbar-nav">
+                <% if (user != null) { %>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" 
                        data-bs-toggle="dropdown">
@@ -70,6 +70,18 @@
                         </a></li>
                     </ul>
                 </li>
+                <% } else { %>
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/auth/login">
+                        <i class="fas fa-sign-in-alt me-1"></i>Login
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/auth/register">
+                        <i class="fas fa-user-plus me-1"></i>Register
+                    </a>
+                </li>
+                <% } %>
             </ul>
         </div>
     </div>

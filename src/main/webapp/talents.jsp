@@ -104,7 +104,11 @@
     </style>
 </head>
 <body>
-    <%@ include file="navbar.jsp" %>
+    <% 
+    User user = (User) session.getAttribute("user");
+    // User can be null for talents page (public page)
+    %>
+    <%@ include file="includes/navbar.jsp" %>
     
     <!-- Search Header Section -->
     <div class="search-section">

@@ -89,14 +89,14 @@
     </style>
 </head>
 <body>
-    <%@ include file="navbar.jsp" %>
-    
     <% 
-    User currentUser = (User) session.getAttribute("loggedInUser");
-    if (currentUser == null) {
-        response.sendRedirect("login.jsp");
+    User user = (User) session.getAttribute("user");
+    if (user == null) {
+        response.sendRedirect(request.getContextPath() + "/auth/login");
         return;
     }
+    %>
+    <%@ include file="includes/navbar.jsp" %>
     
     List<Talent> myTalents = (List<Talent>) request.getAttribute("myTalents");
     Integer totalTalents = (Integer) request.getAttribute("totalTalents");
@@ -230,7 +230,7 @@
                             </td>
                             <td>
                                 <i class="fas fa-eye text-muted"></i> 
-                                <%= talent.getViewCount() != null ? talent.getViewCount() : 0 %>
+                                <%= talent.getViewsCount() %>
                             </td>
                             <td>
                                 <small class="text-muted">

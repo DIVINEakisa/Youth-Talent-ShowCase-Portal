@@ -83,15 +83,14 @@
     </style>
 </head>
 <body>
-    <%@ include file="navbar.jsp" %>
-    
     <% 
-    User currentUser = (User) session.getAttribute("loggedInUser");
-    if (currentUser == null) {
-        response.sendRedirect("login.jsp");
+    User user = (User) session.getAttribute("user");
+    if (user == null) {
+        response.sendRedirect(request.getContextPath() + "/auth/login");
         return;
     }
     %>
+    <%@ include file="includes/navbar.jsp" %>
     
     <!-- Page Header -->
     <div class="page-header">

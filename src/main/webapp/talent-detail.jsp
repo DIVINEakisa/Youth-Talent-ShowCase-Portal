@@ -108,7 +108,11 @@
     </style>
 </head>
 <body>
-    <%@ include file="navbar.jsp" %>
+    <% 
+    User user = (User) session.getAttribute("user");
+    // User can be null for detail page (public page)
+    %>
+    <%@ include file="includes/navbar.jsp" %>
     
     <% 
     Talent talent = (Talent) request.getAttribute("talent");
@@ -241,9 +245,8 @@
                                     </small>
                                 </div>
                                 <% 
-                                if (session.getAttribute("loggedInUser") != null) {
-                                    User currentUser = (User) session.getAttribute("loggedInUser");
-                                    if (currentUser.getUserId() == comment.getUserId() || currentUser.isAdmin()) {
+                                if (user != null) {
+                                    if (user.getUserId() == comment.getUserId() || user.isAdmin()) {
                                 %>
                                 <form action="${pageContext.request.contextPath}/comment/delete" method="post" 
                                       onsubmit="return confirm('Delete this comment?');" class="d-inline">
@@ -346,9 +349,7 @@
                 
                 <!-- Action Buttons -->
                 <% 
-                if (session.getAttribute("loggedInUser") != null) {
-                    User currentUser = (User) session.getAttribute("loggedInUser");
-                    if (currentUser.getUserId() == talent.getUserId()) {
+                if (user != null && user.getUserId() == talent.getUserId()) {
                 %>
                 <div class="d-grid gap-2">
                     <a href="${pageContext.request.contextPath}/edit-talent.jsp?id=<%= talent.getTalentId() %>" 
