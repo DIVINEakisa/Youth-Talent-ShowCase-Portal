@@ -66,3 +66,8 @@
 0:0:0:0:0:0:0:1 - - [20/Feb/2026:13:09:59 +0200] "GET /YouthTalent/images/https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800 HTTP/1.1" 404 5 http-bio-8080-exec-2 4
 0:0:0:0:0:0:0:1 - - [20/Feb/2026:13:09:59 +0200] "GET /YouthTalent/images/https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=800 HTTP/1.1" 404 5 http-bio-8080-exec-4 5
 0:0:0:0:0:0:0:1 - - [20/Feb/2026:13:09:59 +0200] "GET /YouthTalent/images/https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800 HTTP/1.1" 404 5 http-bio-8080-exec-10 3
+0:0:0:0:0:0:0:1 - - [20/Feb/2026:13:18:06 +0200] "GET /YouthTalent/dashboard.jsp HTTP/1.1" 302 - http-bio-8080-exec-1 3600
+0:0:0:0:0:0:0:1 - - [20/Feb/2026:13:18:06 +0200] "GET /YouthTalent/auth/login HTTP/1.1" 200 4528 http-bio-8080-exec-3 134
+0:0:0:0:0:0:0:1 - - [20/Feb/2026:13:18:16 +0200] "POST /YouthTalent/auth/login HTTP/1.1" 302 - http-bio-8080-exec-4 626
+0:0:0:0:0:0:0:1 - - [20/Feb/2026:13:18:16 +0200] "GET /YouthTalent/dashboard.jsp HTTP/1.1" 200 22707 http-bio-8080-exec-5 631
+0:0:0:0:0:0:0:1 - - [20/Feb/2026:13:18:44 +0200] "GET /YouthTalent/talent/view?id=14 HTTP/1.1" 404 5 http-bio-8080-exec-6 2419
