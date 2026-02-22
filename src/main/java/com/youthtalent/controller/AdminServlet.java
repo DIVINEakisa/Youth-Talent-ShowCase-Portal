@@ -73,7 +73,7 @@ public class AdminServlet extends HttpServlet {
         String pathInfo = request.getPathInfo();
         
         if (pathInfo == null) {
-            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+            response.sendRedirect(request.getContextPath() + "/admin/action/dashboard");
             return;
         }
         
@@ -88,7 +88,7 @@ public class AdminServlet extends HttpServlet {
                 reviewReport(request, response);
                 break;
             default:
-                response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+                response.sendRedirect(request.getContextPath() + "/admin/action/dashboard");
         }
     }
 
@@ -216,9 +216,9 @@ public class AdminServlet extends HttpServlet {
         boolean success = talentDAO.updateTalentStatus(talentId, "APPROVED", adminId, null);
         
         if (success) {
-            response.sendRedirect(request.getContextPath() + "/admin/talents/pending?success=Talent approved successfully");
+            response.sendRedirect(request.getContextPath() + "/admin/action/talents/pending?success=Talent approved successfully");
         } else {
-            response.sendRedirect(request.getContextPath() + "/admin/talents/pending?error=Failed to approve talent");
+            response.sendRedirect(request.getContextPath() + "/admin/action/talents/pending?error=Failed to approve talent");
         }
     }
 
@@ -238,9 +238,9 @@ public class AdminServlet extends HttpServlet {
         boolean success = talentDAO.updateTalentStatus(talentId, "REJECTED", adminId, rejectionReason);
         
         if (success) {
-            response.sendRedirect(request.getContextPath() + "/admin/talents/pending?success=Talent rejected");
+            response.sendRedirect(request.getContextPath() + "/admin/action/talents/pending?success=Talent rejected");
         } else {
-            response.sendRedirect(request.getContextPath() + "/admin/talents/pending?error=Failed to reject talent");
+            response.sendRedirect(request.getContextPath() + "/admin/action/talents/pending?error=Failed to reject talent");
         }
     }
 
@@ -261,9 +261,9 @@ public class AdminServlet extends HttpServlet {
         boolean success = reportDAO.updateReportStatus(reportId, status, adminId, adminNotes);
         
         if (success) {
-            response.sendRedirect(request.getContextPath() + "/admin/reports?success=Report reviewed successfully");
+            response.sendRedirect(request.getContextPath() + "/admin/action/reports?success=Report reviewed successfully");
         } else {
-            response.sendRedirect(request.getContextPath() + "/admin/reports?error=Failed to review report");
+            response.sendRedirect(request.getContextPath() + "/admin/action/reports?error=Failed to review report");
         }
     }
 }

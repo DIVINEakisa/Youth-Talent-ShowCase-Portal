@@ -42,7 +42,7 @@
                 <% if (user.isAdmin()) { %>
                 <li class="nav-item">
                     <a class="nav-link <%= "admin".equals(currentPage) ? "active" : "" %>" 
-                       href="${pageContext.request.contextPath}/admin/dashboard">
+                       href="${pageContext.request.contextPath}/admin/action/dashboard">
                         <i class="fas fa-shield-alt me-1"></i>Admin Panel
                     </a>
                 </li>
@@ -57,10 +57,10 @@
                         <i class="fas fa-user-circle me-1"></i><%= user.getUsername() %>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#">
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/profile.jsp">
                             <i class="fas fa-user me-2"></i>Profile
                         </a></li>
-                        <li><a class="dropdown-item" href="#">
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/settings.jsp">
                             <i class="fas fa-cog me-2"></i>Settings
                         </a></li>
                         <li><hr class="dropdown-divider"></li>

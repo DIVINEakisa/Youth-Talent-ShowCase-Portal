@@ -110,7 +110,7 @@ public class AuthServlet extends HttpServlet {
                 
                 // Redirect based on role
                 if (user.isAdmin()) {
-                    response.sendRedirect(request.getContextPath() + "/admin/dashboard.jsp");
+                    response.sendRedirect(request.getContextPath() + "/admin/action/dashboard");
                 } else {
                     response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
                 }

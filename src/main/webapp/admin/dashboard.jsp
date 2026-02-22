@@ -70,22 +70,22 @@
                 <div class="p-3 text-center border-bottom">
                     <h5><i class="fas fa-shield-alt me-2"></i>Admin Panel</h5>
                 </div>
-                <a href="${pageContext.request.contextPath}/admin/dashboard" class="active">
+                <a href="${pageContext.request.contextPath}/admin/action/dashboard" class="active">
                     <i class="fas fa-tachometer-alt me-2"></i>Dashboard
                 </a>
-                <a href="${pageContext.request.contextPath}/admin/talents/pending">
+                <a href="${pageContext.request.contextPath}/admin/action/talents/pending">
                     <i class="fas fa-clock me-2"></i>Pending Talents 
                     <% if (pendingTalents != null && pendingTalents > 0) { %>
                         <span class="badge bg-danger"><%= pendingTalents %></span>
                     <% } %>
                 </a>
-                <a href="${pageContext.request.contextPath}/admin/talents/all">
+                <a href="${pageContext.request.contextPath}/admin/action/talents/all">
                     <i class="fas fa-trophy me-2"></i>All Talents
                 </a>
-                <a href="${pageContext.request.contextPath}/admin/users">
+                <a href="${pageContext.request.contextPath}/admin/action/users">
                     <i class="fas fa-users me-2"></i>Users
                 </a>
-                <a href="${pageContext.request.contextPath}/admin/reports">
+                <a href="${pageContext.request.contextPath}/admin/action/reports">
                     <i class="fas fa-flag me-2"></i>Reports
                     <% if (pendingReports != null && pendingReports > 0) { %>
                         <span class="badge bg-warning"><%= pendingReports %></span>
