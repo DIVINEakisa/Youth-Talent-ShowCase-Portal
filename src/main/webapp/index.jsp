@@ -80,7 +80,7 @@
         
         /* Hero Section */
         .hero-section {
-            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            background: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1920&q=80') center/cover;
             color: white;
             padding: 120px 0 100px;
             position: relative;
@@ -94,19 +94,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1920&q=80') center/cover;
-            opacity: 0.15;
-            z-index: 0;
-        }
-        
-        .hero-section::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(25, 135, 84, 0.8) 0%, rgba(13, 110, 253, 0.6) 100%);
+            background: linear-gradient(135deg, rgba(25, 135, 84, 0.85) 0%, rgba(13, 110, 253, 0.75) 100%);
             z-index: 0;
         }
         
@@ -307,6 +295,68 @@
         /* How It Works Section */
         .how-it-works {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        /* Talent Showcase Gallery */
+        .showcase-gallery {
+            background: white;
+            padding: 80px 0;
+        }
+        
+        .showcase-card {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            height: 100%;
+            position: relative;
+        }
+        
+        .showcase-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+        
+        .showcase-image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        
+        .showcase-card:hover .showcase-image {
+            transform: scale(1.1);
+        }
+        
+        .showcase-content {
+            padding: 24px;
+            background: white;
+        }
+        
+        .showcase-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .showcase-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+        
+        .showcase-author {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .step-card {
@@ -690,6 +740,157 @@
                         <div class="stat-label">Satisfaction Rate</div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Talent Showcase Gallery -->
+    <section class="showcase-gallery">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title">Featured Talents</h2>
+                <p class="section-subtitle">
+                    Discover amazing talents from our creative community
+                </p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="showcase-card">
+                        <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=600&h=400&fit=crop" 
+                             alt="Music Production" class="showcase-image">
+                        <div class="showcase-content">
+                            <span class="showcase-badge"><i class="fas fa-music"></i> Music</span>
+                            <h3 class="showcase-title">Electronic Music Production</h3>
+                            <div class="showcase-author">
+                                <i class="fas fa-user-circle"></i>
+                                <span>by Alex Johnson</span>
+                            </div>
+                            <div class="mt-2">
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <span class="text-muted ms-2">5.0 (128 ratings)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="showcase-card">
+                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop" 
+                             alt="Digital Art" class="showcase-image">
+                        <div class="showcase-content">
+                            <span class="showcase-badge"><i class="fas fa-palette"></i> Art & Design</span>
+                            <h3 class="showcase-title">Digital Illustration Portfolio</h3>
+                            <div class="showcase-author">
+                                <i class="fas fa-user-circle"></i>
+                                <span>by Sarah Martinez</span>
+                            </div>
+                            <div class="mt-2">
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star-half-alt" style="color: #ffc107;"></i>
+                                <span class="text-muted ms-2">4.8 (95 ratings)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="showcase-card">
+                        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&h=400&fit=crop" 
+                             alt="Coding Project" class="showcase-image">
+                        <div class="showcase-content">
+                            <span class="showcase-badge"><i class="fas fa-code"></i> Coding & Tech</span>
+                            <h3 class="showcase-title">AI-Powered Mobile App</h3>
+                            <div class="showcase-author">
+                                <i class="fas fa-user-circle"></i>
+                                <span>by Mike Chen</span>
+                            </div>
+                            <div class="mt-2">
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <span class="text-muted ms-2">5.0 (142 ratings)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="showcase-card">
+                        <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?w=600&h=400&fit=crop" 
+                             alt="Creative Writing" class="showcase-image">
+                        <div class="showcase-content">
+                            <span class="showcase-badge"><i class="fas fa-pen-fancy"></i> Writing</span>
+                            <h3 class="showcase-title">Fantasy Novel Series</h3>
+                            <div class="showcase-author">
+                                <i class="fas fa-user-circle"></i>
+                                <span>by Emma Davis</span>
+                            </div>
+                            <div class="mt-2">
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <span class="text-muted ms-2">4.9 (87 ratings)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="showcase-card">
+                        <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&h=400&fit=crop" 
+                             alt="Innovation Project" class="showcase-image">
+                        <div class="showcase-content">
+                            <span class="showcase-badge"><i class="fas fa-lightbulb"></i> Innovation</span>
+                            <h3 class="showcase-title">Sustainable Energy Solution</h3>
+                            <div class="showcase-author">
+                                <i class="fas fa-user-circle"></i>
+                                <span>by James Wilson</span>
+                            </div>
+                            <div class="mt-2">
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star-half-alt" style="color: #ffc107;"></i>
+                                <span class="text-muted ms-2">4.7 (73 ratings)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="showcase-card">
+                        <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=600&h=400&fit=crop" 
+                             alt="Business Startup" class="showcase-image">
+                        <div class="showcase-content">
+                            <span class="showcase-badge"><i class="fas fa-briefcase"></i> Entrepreneurship</span>
+                            <h3 class="showcase-title">Social Impact Startup</h3>
+                            <div class="showcase-author">
+                                <i class="fas fa-user-circle"></i>
+                                <span>by Lisa Anderson</span>
+                            </div>
+                            <div class="mt-2">
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <span class="text-muted ms-2">5.0 (156 ratings)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-5">
+                <a href="${pageContext.request.contextPath}/talent/list" class="btn btn-success btn-lg rounded-pill px-5">
+                    <i class="fas fa-eye"></i> View All Talents
+                </a>
             </div>
         </div>
     </section>
