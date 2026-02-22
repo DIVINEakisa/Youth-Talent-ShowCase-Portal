@@ -313,8 +313,13 @@ public class TalentDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
             stmt.setInt(1, talentId);
-            return stmt.executeUpdate() > 0;
+            int rowsAffected = stmt.executeUpdate();
+            
+            System.out.println("Delete talent " + talentId + ": " + rowsAffected + " rows affected");
+            
+            return rowsAffected > 0;
         } catch (SQLException e) {
+            System.err.println("Error deleting talent " + talentId + ": " + e.getMessage());
             e.printStackTrace();
         }
         return false;

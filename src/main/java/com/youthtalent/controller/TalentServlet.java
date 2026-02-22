@@ -72,19 +72,30 @@ public class TalentServlet extends HttpServlet {
             throws ServletException, IOException {
         String pathInfo = request.getPathInfo();
         
+        System.out.println("DEBUG TalentServlet.doPost() - pathInfo: " + pathInfo);
+        System.out.println("DEBUG TalentServlet.doPost() - talentId param: " + request.getParameter("talentId"));
+        
         if (pathInfo == null) {
+            System.out.println("DEBUG: pathInfo is null, redirecting to list");
             response.sendRedirect(request.getContextPath() + "/talent/list");
             return;
         }
         
         switch (pathInfo) {
             case "/add":
+                System.out.println("DEBUG: Calling addTalent()");
                 addTalent(request, response);
                 break;
             case "/edit":
+                System.out.println("DEBUG: Calling editTalent()");
                 editTalent(request, response);
                 break;
+            case "/delete":
+                System.out.println("DEBUG: Calling deleteTalent()");
+                deleteTalent(request, response);
+                break;
             default:
+                System.out.println("DEBUG: No matching case for: " + pathInfo);
                 response.sendRedirect(request.getContextPath() + "/talent/list");
         }
     }
@@ -329,26 +340,49 @@ public class TalentServlet extends HttpServlet {
      */
     private void deleteTalent(HttpServletRequest request, HttpServletResponse response) 
             throws IOException {
+        System.out.println("DEBUG deleteTalent() - METHOD CALLED");
+        
         HttpSession session = request.getSession(false);
         
         if (session == null || session.getAttribute("userId") == null) {
+            System.out.println("DEBUG deleteTalent() - No session, redirecting to login");
             response.sendRedirect(request.getContextPath() + "/auth/login");
             return;
         }
         
-        String talentIdParam = request.getParameter("id");
+        String talentIdParam = request.getParameter("talentId");
+        System.out.println("DEBUG deleteTalent() - talentId param: " + talentIdParam);
+        
         int talentId = Integer.parseInt(talentIdParam);
         int userId = (Integer) session.getAttribute("userId");
+        
+        System.out.println("DEBUG deleteTalent() - Parsed talentId: " + talentId + ", userId: " + userId);
         
         // Get talent to check ownership
         Talent talent = talentDAO.getTalentById(talentId);
         
         if (talent != null && talent.getUserId() == userId) {
-            talentDAO.deleteTalent(talentId);
-            response.sendRedirect(request.getContextPath() + "/talent/my-talents?success=Talent deleted successfully");
+            System.out.println("DEBUG deleteTalent() - Ownership verified, attempting delete...");
+            // Try to delete and check if successful
+            boolean deleted = talentDAO.deleteTalent(talentId);
+            
+            if (deleted) {
+                System.out.println("DEBUG deleteTalent() - Delete SUCCESS");
+                session.setAttribute("message", "Talent deleted successfully!");
+                session.setAttribute("messageType", "success");
+            } else {
+                System.out.println("DEBUG deleteTalent() - Delete FAILED");
+                session.setAttribute("message", "Failed to delete talent. Please try again.");
+                session.setAttribute("messageType", "danger");
+            }
         } else {
-            response.sendRedirect(request.getContextPath() + "/talent/my-talents?error=Unauthorized action");
+            System.out.println("DEBUG deleteTalent() - Ownership check FAILED or talent not found");
+            session.setAttribute("message", "Unauthorized action!");
+            session.setAttribute("messageType", "danger");
         }
+        
+        System.out.println("DEBUG deleteTalent() - Redirecting to my-talents");
+        response.sendRedirect(request.getContextPath() + "/talent/my-talents");
     }
 
     /**

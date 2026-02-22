@@ -117,7 +117,7 @@
     }
     
     // Check if user owns this talent
-    if (talent.getUserId() != currentUser.getUserId() && !currentUser.isAdmin()) {
+    if (talent.getUserId() != user.getUserId() && !user.isAdmin()) {
     %>
         <div class="container mt-5">
             <div class="alert alert-danger">

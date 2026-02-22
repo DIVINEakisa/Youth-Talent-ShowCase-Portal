@@ -273,7 +273,7 @@
                                     </a>
                                     <% } %>
                                     
-                                    <a href="${pageContext.request.contextPath}/edit-talent.jsp?id=<%= talent.getTalentId() %>" 
+                                    <a href="${pageContext.request.contextPath}/talent/edit?id=<%= talent.getTalentId() %>" 
                                        class="btn btn-outline-success" title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
