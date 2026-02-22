@@ -94,7 +94,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, rgba(25, 135, 84, 0.85) 0%, rgba(13, 110, 253, 0.75) 100%);
+            background: linear-gradient(135deg, rgba(25, 135, 84, 0.4) 0%, rgba(13, 110, 253, 0.3) 100%);
             z-index: 0;
         }
         
@@ -109,6 +109,7 @@
             margin-bottom: 24px;
             line-height: 1.2;
             animation: fadeInUp 0.8s ease;
+            text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 0, 0, 0.5);
         }
         
         .hero-section .subtitle {
@@ -117,6 +118,7 @@
             font-weight: 300;
             opacity: 0.95;
             animation: fadeInUp 0.8s ease 0.2s both;
+            text-shadow: 1px 1px 15px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 0, 0, 0.5);
         }
         
         .hero-section .description {
@@ -128,6 +130,7 @@
             line-height: 1.7;
             opacity: 0.9;
             animation: fadeInUp 0.8s ease 0.4s both;
+            text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.8), 0 0 15px rgba(0, 0, 0, 0.6);
         }
         
         .hero-buttons {
