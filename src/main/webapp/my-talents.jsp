@@ -174,7 +174,7 @@
         
         <!-- Action Buttons -->
         <div class="mb-4">
-            <a href="${pageContext.request.contextPath}/add-talent.jsp" class="btn btn-green btn-lg">
+            <a href="${pageContext.request.contextPath}/talent/add" class="btn btn-green btn-lg">
                 <i class="fas fa-plus"></i> Add New Talent
             </a>
             <a href="${pageContext.request.contextPath}/talent/list" class="btn btn-outline-success btn-lg ms-2">
@@ -313,7 +313,7 @@
                 <i class="fas fa-folder-open"></i>
                 <h3 class="text-muted">No Talents Yet</h3>
                 <p class="text-muted">You haven't added any talents yet. Start showcasing your skills!</p>
-                <a href="${pageContext.request.contextPath}/add-talent.jsp" class="btn btn-green btn-lg mt-3">
+                <a href="${pageContext.request.contextPath}/talent/add" class="btn btn-green btn-lg mt-3">
                     <i class="fas fa-plus"></i> Add Your First Talent
                 </a>
             </div>

@@ -93,7 +93,7 @@
     // Get talent ID from request
     String talentIdParam = request.getParameter("id");
     if (talentIdParam == null) {
-        response.sendRedirect("my-talents.jsp");
+        response.sendRedirect(request.getContextPath() + "/talent/my-talents");
         return;
     }
     
@@ -108,7 +108,7 @@
             <div class="alert alert-danger">
                 <i class="fas fa-exclamation-triangle"></i> Talent not found.
             </div>
-            <a href="${pageContext.request.contextPath}/my-talents.jsp" class="btn btn-green">
+            <a href="${pageContext.request.contextPath}/talent/my-talents" class="btn btn-green">
                 <i class="fas fa-arrow-left"></i> Back to My Talents
             </a>
         </div>
@@ -123,7 +123,7 @@
             <div class="alert alert-danger">
                 <i class="fas fa-exclamation-triangle"></i> You do not have permission to edit this talent.
             </div>
-            <a href="${pageContext.request.contextPath}/my-talents.jsp" class="btn btn-green">
+            <a href="${pageContext.request.contextPath}/talent/my-talents" class="btn btn-green">
                 <i class="fas fa-arrow-left"></i> Back to My Talents
             </a>
         </div>
@@ -265,7 +265,7 @@
                 
                 <!-- Action Buttons -->
                 <div class="d-flex justify-content-between">
-                    <a href="${pageContext.request.contextPath}/my-talents.jsp" class="btn btn-outline-secondary btn-lg">
+                    <a href="${pageContext.request.contextPath}/talent/my-talents" class="btn btn-outline-secondary btn-lg">
                         <i class="fas fa-times"></i> Cancel
                     </a>
                     <button type="submit" class="btn btn-green btn-lg">

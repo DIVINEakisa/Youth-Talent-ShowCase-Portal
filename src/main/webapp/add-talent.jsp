@@ -238,7 +238,7 @@
                 
                 <!-- Action Buttons -->
                 <div class="d-flex justify-content-between">
-                    <a href="${pageContext.request.contextPath}/my-talents.jsp" class="btn btn-outline-secondary btn-lg">
+                    <a href="${pageContext.request.contextPath}/talent/my-talents" class="btn btn-outline-secondary btn-lg">
                         <i class="fas fa-arrow-left"></i> Cancel
                     </a>
                     <button type="submit" class="btn btn-green btn-lg">
@@ -343,20 +343,21 @@
             }
         }
         
-        // Form validation (Bootstrap 5)
+        // Form validation (Bootstrap 5) with submission prevention
         const form = document.getElementById('addTalentForm');
         
         form.addEventListener('submit', function(event) {
+            // Always add validation class to show errors
+            form.classList.add('was-validated');
+            
+            // If form is invalid, prevent submission
             if (!form.checkValidity()) {
                 event.preventDefault();
                 event.stopPropagation();
+                return false;
             }
             
-            form.classList.add('was-validated');
-        });
-        
-        // Prevent multiple submissions
-        form.addEventListener('submit', function() {
+            // Form is valid - prevent multiple submissions
             const submitButton = form.querySelector('button[type="submit"]');
             submitButton.disabled = true;
             submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
