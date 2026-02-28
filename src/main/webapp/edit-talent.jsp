@@ -1,10 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="com.youthtalent.model.Talent" %>
-<%@ page import="com.youthtalent.model.Category" %>
-<%@ page import="com.youthtalent.model.User" %>
-<%@ page import="com.youthtalent.dao.TalentDAO" %>
-<%@ page import="com.youthtalent.dao.CategoryDAO" %>
-<%@ page import="java.util.List" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
