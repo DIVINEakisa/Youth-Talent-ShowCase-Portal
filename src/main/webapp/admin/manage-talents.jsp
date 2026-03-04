@@ -189,19 +189,30 @@
                                         </div>
                                         
                                         <!-- Media Preview -->
-                                        <% if (talent.getMediaUrl() != null && !talent.getMediaUrl().isEmpty()) { %>
-                                            <div class="mb-3">
-                                                <% if ("IMAGE".equals(talent.getMediaType())) { %>
-                                                    <img src="<%= request.getContextPath() + "/uploads/" + talent.getMediaUrl() %>" 
-                                                         class="talent-media" alt="<%= talent.getTitle() %>">
-                                                <% } else if ("VIDEO".equals(talent.getMediaType())) { %>
-                                                    <video class="talent-media" controls>
-                                                        <source src="<%= request.getContextPath() + "/uploads/" + talent.getMediaUrl() %>" type="video/mp4">
-                                                        Your browser does not support video.
-                                                    </video>
-                                                <% } %>
-                                            </div>
-                                        <% } %>
+                                        <div class="mb-3">
+                                            <% 
+                                            String imageSource = null;
+                                            if (talent.getImageUrl() != null && !talent.getImageUrl().isEmpty()) {
+                                                imageSource = talent.getImageUrl();
+                                            } else if (talent.getMediaUrl() != null && !talent.getMediaUrl().isEmpty() && "IMAGE".equals(talent.getMediaType())) {
+                                                imageSource = talent.getMediaUrl();
+                                            }
+                                            
+                                            if (imageSource != null) { %>
+                                                <img src="<%= request.getContextPath() + "/uploads/" + imageSource %>" 
+                                                     class="talent-media" alt="<%= talent.getTitle() %>"
+                                                     onerror="this.src='<%= request.getContextPath() %>/images/placeholder.png'">
+                                            <% } else if (talent.getMediaUrl() != null && !talent.getMediaUrl().isEmpty() && "VIDEO".equals(talent.getMediaType())) { %>
+                                                <video class="talent-media" controls>
+                                                    <source src="<%= request.getContextPath() + "/uploads/" + talent.getMediaUrl() %>" type="video/mp4">
+                                                    Your browser does not support video.
+                                                </video>
+                                            <% } else { %>
+                                                <div class="talent-media bg-light d-flex align-items-center justify-content-center">
+                                                    <i class="fas fa-image fa-3x text-muted"></i>
+                                                </div>
+                                            <% } %>
+                                        </div>
                                         
                                         <!-- Action Buttons -->
                                         <div class="d-flex justify-content-between align-items-center">
