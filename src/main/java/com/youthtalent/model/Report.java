@@ -131,6 +131,35 @@ public class Report {
         this.reviewerUsername = reviewerUsername;
     }
 
+    // Alias methods for JSP compatibility
+    public String getReportType() {
+        return reportedItemType;
+    }
+
+    public int getContentId() {
+        return reportedItemId;
+    }
+
+    public String getContentType() {
+        return reportedItemType;
+    }
+
+    public String getReason() {
+        return reportReason;
+    }
+
+    public Timestamp getReportedAt() {
+        return createdAt;
+    }
+
+    public Timestamp getReviewedAt() {
+        return updatedAt;
+    }
+
+    public Integer getAdminId() {
+        return reviewedBy;
+    }
+
     @Override
     public String toString() {
         return "Report{" +

@@ -215,6 +215,24 @@ public class Talent {
         return "REJECTED".equals(status);
     }
 
+    // Alias methods for JSP compatibility
+    public Timestamp getSubmittedAt() {
+        return createdAt;
+    }
+
+    public String getMediaType() {
+        if (mediaUrl == null || mediaUrl.isEmpty()) {
+            return null;
+        }
+        String lower = mediaUrl.toLowerCase();
+        if (lower.endsWith(".mp4") || lower.endsWith(".webm") || lower.endsWith(".avi")) {
+            return "VIDEO";
+        } else if (lower.endsWith(".jpg") || lower.endsWith(".jpeg") || lower.endsWith(".png") || lower.endsWith(".gif")) {
+            return "IMAGE";
+        }
+        return "IMAGE"; // Default to image
+    }
+
     @Override
     public String toString() {
         return "Talent{" +
