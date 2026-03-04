@@ -1,0 +1,12 @@
+0:0:0:0:0:0:0:1 - - [04/Mar/2026:09:56:12 +0200] "GET /YouthTalent/ HTTP/1.1" 200 4528 http-bio-8080-exec-1 1283
+0:0:0:0:0:0:0:1 - - [04/Mar/2026:09:57:26 +0200] "GET /YouthTalent/login.jsp HTTP/1.1" 200 4528 http-bio-8080-exec-3 3
+0:0:0:0:0:0:0:1 - - [04/Mar/2026:09:57:38 +0200] "POST /YouthTalent/auth/login HTTP/1.1" 302 - http-bio-8080-exec-5 350
+0:0:0:0:0:0:0:1 - - [04/Mar/2026:09:57:38 +0200] "GET /YouthTalent/admin/action/dashboard HTTP/1.1" 200 12730 http-bio-8080-exec-6 391
+0:0:0:0:0:0:0:1 - - [04/Mar/2026:09:57:46 +0200] "GET /YouthTalent/admin/action/users HTTP/1.1" 200 21474 http-bio-8080-exec-7 248
+0:0:0:0:0:0:0:1 - - [04/Mar/2026:09:57:48 +0200] "GET /YouthTalent/admin/action/reports HTTP/1.1" 200 19501 http-bio-8080-exec-8 239
+0:0:0:0:0:0:0:1 - - [04/Mar/2026:09:58:05 +0200] "GET /YouthTalent/admin/action/users HTTP/1.1" 200 21474 http-bio-8080-exec-9 42
+0:0:0:0:0:0:0:1 - - [04/Mar/2026:09:58:08 +0200] "GET /YouthTalent/admin/action/talents/all HTTP/1.1" 200 52185 http-bio-8080-exec-10 1186
+0:0:0:0:0:0:0:1 - - [04/Mar/2026:09:58:17 +0200] "GET /YouthTalent/admin/action/talents/pending HTTP/1.1" 200 44697 http-bio-8080-exec-10 531
+0:0:0:0:0:0:0:1 - - [04/Mar/2026:09:58:17 +0200] "GET /YouthTalent/uploads/https://github.com/example/smart-recycle HTTP/1.1" 404 5 http-bio-8080-exec-10 8
+0:0:0:0:0:0:0:1 - - [04/Mar/2026:09:58:17 +0200] "GET /YouthTalent/uploads/https://github.com/example/blockchain-vote HTTP/1.1" 404 5 http-bio-8080-exec-4 7
+0:0:0:0:0:0:0:1 - - [04/Mar/2026:09:58:17 +0200] "GET /YouthTalent/uploads/https://github.com/example/plant-ai HTTP/1.1" 404 5 http-bio-8080-exec-3 6
