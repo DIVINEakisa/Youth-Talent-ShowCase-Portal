@@ -38,10 +38,18 @@
             --primary-green: #198754;
         }
         
+        body {
+            overflow-x: hidden;
+        }
+        
         .sidebar {
             background-color: #212529;
             min-height: 100vh;
             color: white;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
         }
         
         .sidebar a {
@@ -49,7 +57,7 @@
             text-decoration: none;
             padding: 15px 20px;
             display: block;
-            transition: all 0.3s;
+            transition: background-color 0.3s, color 0.3s;
         }
         
         .sidebar a:hover, .sidebar a.active {
@@ -61,24 +69,36 @@
             border: 1px solid #dee2e6;
             border-radius: 10px;
             overflow: hidden;
-            transition: all 0.3s;
+            transition: box-shadow 0.3s;
             margin-bottom: 20px;
+            height: 100%;
         }
         
         .talent-card:hover {
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transform: translateY(-5px);
+        }
+        
+        .talent-card .card-body {
+            display: flex;
+            flex-direction: column;
         }
         
         .talent-media {
             width: 100%;
             height: 200px;
             object-fit: cover;
+            display: block;
+            background-color: #f8f9fa;
         }
         
         .badge-lg {
             padding: 8px 15px;
             font-size: 14px;
+        }
+        
+        .main-content {
+            max-height: 100vh;
+            overflow-y: auto;
         }
     </style>
 </head>
@@ -118,7 +138,7 @@
             </div>
             
             <!-- Main Content -->
-            <div class="col-md-10 p-4">
+            <div class="col-md-10 p-4 main-content">
                 <div class="mb-4">
                     <h2>
                         <i class="fas fa-clock me-2"></i>
@@ -148,9 +168,9 @@
                 
                 <!-- Talents List -->
                 <% if (talents != null && !talents.isEmpty()) { %>
-                    <div class="row">
+                    <div class="row row-cols-1 row-cols-md-2 g-4">
                         <% for (Talent talent : talents) { %>
-                            <div class="col-md-6">
+                            <div class="col">
                                 <div class="talent-card">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-start mb-3">
@@ -174,7 +194,7 @@
                                             </div>
                                         </div>
                                         
-                                        <p class="card-text"><%= talent.getDescription() %></p>
+                                        <p class="card-text" style="max-height: 60px; overflow: hidden; text-overflow: ellipsis;"><%= talent.getDescription() %></p>
                                         
                                         <div class="mb-3">
                                             <span class="badge bg-info me-2">
@@ -189,7 +209,7 @@
                                         </div>
                                         
                                         <!-- Media Preview -->
-                                        <div class="mb-3">
+                                        <div class="mb-3" style="height: 200px; background-color: #f8f9fa; border-radius: 8px; overflow: hidden;">
                                             <% 
                                             String imageSource = null;
                                             if (talent.getImageUrl() != null && !talent.getImageUrl().isEmpty()) {
@@ -199,16 +219,22 @@
                                             }
                                             
                                             if (imageSource != null) { %>
-                                                <img src="<%= request.getContextPath() + "/uploads/" + imageSource %>" 
-                                                     class="talent-media" alt="<%= talent.getTitle() %>"
-                                                     onerror="this.src='<%= request.getContextPath() %>/images/placeholder.png'">
+                                                <img src="<%= imageSource %>" 
+                                                     class="talent-media" 
+                                                     alt="<%= talent.getTitle() %>"
+                                                     loading="lazy"
+                                                     style="width: 100%; height: 100%; object-fit: cover;"
+                                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                                <div class="d-none align-items-center justify-content-center" style="width: 100%; height: 100%;">
+                                                    <i class="fas fa-image fa-3x text-muted"></i>
+                                                </div>
                                             <% } else if (talent.getMediaUrl() != null && !talent.getMediaUrl().isEmpty() && "VIDEO".equals(talent.getMediaType())) { %>
-                                                <video class="talent-media" controls>
-                                                    <source src="<%= request.getContextPath() + "/uploads/" + talent.getMediaUrl() %>" type="video/mp4">
+                                                <video class="talent-media" controls style="width: 100%; height: 100%; object-fit: cover;">
+                                                    <source src="<%= talent.getMediaUrl() %>" type="video/mp4">
                                                     Your browser does not support video.
                                                 </video>
                                             <% } else { %>
-                                                <div class="talent-media bg-light d-flex align-items-center justify-content-center">
+                                                <div class="d-flex align-items-center justify-content-center" style="width: 100%; height: 100%;">
                                                     <i class="fas fa-image fa-3x text-muted"></i>
                                                 </div>
                                             <% } %>
