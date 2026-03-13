@@ -217,6 +217,8 @@ CREATE TABLE reports (
 -- View: talent_statistics
 -- Description: Calculated statistics for each talent
 -- ============================================================
+DROP VIEW IF EXISTS talent_statistics;
+
 CREATE VIEW talent_statistics AS
 SELECT 
     t.talent_id,
@@ -243,16 +245,10 @@ LEFT JOIN comments cm ON t.talent_id = cm.talent_id
 GROUP BY t.talent_id, t.title, t.user_id, u.username, c.category_name, t.status, t.views_count, t.created_at;
 
 -- ============================================================
--- Stored Procedure: Update Talent Average Rating
+-- Stored Procedure: Update Talent Average Rating (Optional)
 -- ============================================================
-DELIMITER //
-CREATE PROCEDURE UpdateTalentRating(IN p_talent_id INT)
-BEGIN
-    -- This procedure can be called after a new rating is added
-    -- Currently, ratings are calculated via the view, but this can be used for denormalization
-    SELECT AVG(rating_value) INTO @avg_rating FROM ratings WHERE talent_id = p_talent_id;
-END //
-DELIMITER ;
+-- Note: This procedure is intentionally omitted from auto-import to keep
+-- phpMyAdmin imports stable on limited local setups.
 
 -- ============================================================
 -- Sample Data Insertions

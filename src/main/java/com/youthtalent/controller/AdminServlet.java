@@ -38,6 +38,7 @@ public class AdminServlet extends HttpServlet {
         }
         
         String pathInfo = request.getPathInfo();
+        pathInfo = normalizeAdminPath(pathInfo);
         
         if (pathInfo == null || pathInfo.equals("/")) {
             showDashboard(request, response);
@@ -77,9 +78,10 @@ public class AdminServlet extends HttpServlet {
         }
         
         String pathInfo = request.getPathInfo();
+        pathInfo = normalizeAdminPath(pathInfo);
         
         if (pathInfo == null) {
-            response.sendRedirect(request.getContextPath() + "/admin/action/dashboard");
+            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
             return;
         }
         
@@ -97,7 +99,7 @@ public class AdminServlet extends HttpServlet {
                 deleteOpportunity(request, response);
                 break;
             default:
-                response.sendRedirect(request.getContextPath() + "/admin/action/dashboard");
+                response.sendRedirect(request.getContextPath() + "/admin/dashboard");
         }
     }
 
@@ -242,9 +244,9 @@ public class AdminServlet extends HttpServlet {
         boolean success = talentDAO.updateTalentStatus(talentId, "APPROVED", adminId, null);
         
         if (success) {
-            response.sendRedirect(request.getContextPath() + "/admin/action/talents/pending?success=Talent approved successfully");
+            response.sendRedirect(request.getContextPath() + "/admin/talents/pending?success=Talent approved successfully");
         } else {
-            response.sendRedirect(request.getContextPath() + "/admin/action/talents/pending?error=Failed to approve talent");
+            response.sendRedirect(request.getContextPath() + "/admin/talents/pending?error=Failed to approve talent");
         }
     }
 
@@ -264,9 +266,9 @@ public class AdminServlet extends HttpServlet {
         boolean success = talentDAO.updateTalentStatus(talentId, "REJECTED", adminId, rejectionReason);
         
         if (success) {
-            response.sendRedirect(request.getContextPath() + "/admin/action/talents/pending?success=Talent rejected");
+            response.sendRedirect(request.getContextPath() + "/admin/talents/pending?success=Talent rejected");
         } else {
-            response.sendRedirect(request.getContextPath() + "/admin/action/talents/pending?error=Failed to reject talent");
+            response.sendRedirect(request.getContextPath() + "/admin/talents/pending?error=Failed to reject talent");
         }
     }
 
@@ -287,9 +289,9 @@ public class AdminServlet extends HttpServlet {
         boolean success = reportDAO.updateReportStatus(reportId, status, adminId, adminNotes);
         
         if (success) {
-            response.sendRedirect(request.getContextPath() + "/admin/action/reports?success=Report reviewed successfully");
+            response.sendRedirect(request.getContextPath() + "/admin/reports?success=Report reviewed successfully");
         } else {
-            response.sendRedirect(request.getContextPath() + "/admin/action/reports?error=Failed to review report");
+            response.sendRedirect(request.getContextPath() + "/admin/reports?error=Failed to review report");
         }
     }
 
@@ -304,7 +306,7 @@ public class AdminServlet extends HttpServlet {
         String opportunityIdParam = request.getParameter("opportunityId");
         String reason = request.getParameter("reason");
         if (opportunityIdParam == null || opportunityIdParam.isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/admin/action/opportunities?error=Invalid opportunity ID");
+            response.sendRedirect(request.getContextPath() + "/admin/opportunities?error=Invalid opportunity ID");
             return;
         }
 
@@ -312,9 +314,25 @@ public class AdminServlet extends HttpServlet {
         boolean success = opportunityDAO.softDeleteOpportunity(opportunityId, adminId, reason);
 
         if (success) {
-            response.sendRedirect(request.getContextPath() + "/admin/action/opportunities?success=Opportunity removed successfully");
+            response.sendRedirect(request.getContextPath() + "/admin/opportunities?success=Opportunity removed successfully");
         } else {
-            response.sendRedirect(request.getContextPath() + "/admin/action/opportunities?error=Failed to remove opportunity");
+            response.sendRedirect(request.getContextPath() + "/admin/opportunities?error=Failed to remove opportunity");
         }
+    }
+
+    /**
+     * Allows both /admin/* and /admin/action/* URL styles.
+     */
+    private String normalizeAdminPath(String pathInfo) {
+        if (pathInfo == null || pathInfo.isEmpty()) {
+            return "/";
+        }
+        if (pathInfo.startsWith("/action/")) {
+            return pathInfo.substring("/action".length());
+        }
+        if ("/action".equals(pathInfo)) {
+            return "/";
+        }
+        return pathInfo;
     }
 }

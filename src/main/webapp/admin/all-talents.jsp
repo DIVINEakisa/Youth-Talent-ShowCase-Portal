@@ -148,7 +148,7 @@
                                             </td>
                                             <td><small><%= talent.getSubmittedAt() %></small></td>
                                             <td>
-                                                <a href="${pageContext.request.contextPath}/talents/detail?id=<%= talent.getTalentId() %>" 
+                                                <a href="${pageContext.request.contextPath}/talent/view?id=<%= talent.getTalentId() %>" 
                                                    class="btn btn-sm btn-outline-primary" target="_blank">
                                                     <i class="fas fa-eye"></i>
                                                 </a>

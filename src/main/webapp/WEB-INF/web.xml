@@ -130,6 +130,11 @@
     </servlet-mapping>
 
     <servlet-mapping>
+        <servlet-name>AdminServlet</servlet-name>
+        <url-pattern>/admin/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
         <servlet-name>OpportunityServlet</servlet-name>
         <url-pattern>/opportunity/*</url-pattern>
     </servlet-mapping>
