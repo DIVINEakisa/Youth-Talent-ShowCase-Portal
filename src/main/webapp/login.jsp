@@ -111,10 +111,7 @@
                 
                 <div class="text-center mt-3 text-white">
                     <p class="mb-0">
-                        <small>
-                            <i class="fas fa-info-circle me-1"></i> 
-                            Demo credentials: admin / admin123 or jane_smith / password
-                        </small>
+
                     </p>
                 </div>
             </div>
