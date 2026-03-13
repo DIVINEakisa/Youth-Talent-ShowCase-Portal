@@ -67,6 +67,9 @@
                 <a href="${pageContext.request.contextPath}/admin/action/reports">
                     <i class="fas fa-flag me-2"></i>Reports
                 </a>
+                <a href="${pageContext.request.contextPath}/admin/action/opportunities">
+                    <i class="fas fa-briefcase me-2"></i>Opportunities
+                </a>
                 <hr class="bg-secondary">
                 <a href="${pageContext.request.contextPath}/dashboard.jsp">
                     <i class="fas fa-home me-2"></i>Back to Portal

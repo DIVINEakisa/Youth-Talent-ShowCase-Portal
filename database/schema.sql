@@ -13,6 +13,7 @@ DROP TABLE IF EXISTS user_badges;
 DROP TABLE IF EXISTS reports;
 DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS ratings;
+DROP TABLE IF EXISTS opportunity_moderation_logs;
 DROP TABLE IF EXISTS opportunities;
 DROP TABLE IF EXISTS talents;
 DROP TABLE IF EXISTS badges;
@@ -96,13 +97,35 @@ CREATE TABLE opportunities (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     responded_at TIMESTAMP NULL,
+    is_deleted BOOLEAN DEFAULT FALSE,
+    deleted_at TIMESTAMP NULL,
+    deleted_by INT NULL,
     FOREIGN KEY (employer_id) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (youth_id) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (talent_id) REFERENCES talents(talent_id) ON DELETE CASCADE,
+    FOREIGN KEY (deleted_by) REFERENCES users(user_id) ON DELETE SET NULL,
     INDEX idx_employer_id (employer_id),
     INDEX idx_youth_id (youth_id),
     INDEX idx_talent_id (talent_id),
-    INDEX idx_status (status)
+    INDEX idx_status (status),
+    INDEX idx_is_deleted (is_deleted)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ============================================================
+-- Table: opportunity_moderation_logs
+-- Description: Audit trail for opportunity moderation actions
+-- ============================================================
+CREATE TABLE opportunity_moderation_logs (
+    log_id INT PRIMARY KEY AUTO_INCREMENT,
+    opportunity_id INT NOT NULL,
+    admin_id INT NOT NULL,
+    action ENUM('SOFT_DELETE') NOT NULL,
+    reason TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (opportunity_id) REFERENCES opportunities(opportunity_id) ON DELETE CASCADE,
+    FOREIGN KEY (admin_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    INDEX idx_opportunity_id (opportunity_id),
+    INDEX idx_admin_id (admin_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ============================================================

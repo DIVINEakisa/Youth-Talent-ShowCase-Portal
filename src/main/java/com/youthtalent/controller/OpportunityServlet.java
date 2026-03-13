@@ -6,6 +6,7 @@ import com.youthtalent.dao.TalentDAO;
 import com.youthtalent.model.Opportunity;
 import com.youthtalent.model.Talent;
 import com.youthtalent.model.User;
+import com.youthtalent.util.NotificationService;
 import com.youthtalent.util.ValidationUtil;
 
 import javax.servlet.ServletException;
@@ -25,12 +26,14 @@ public class OpportunityServlet extends HttpServlet {
     private OpportunityDAO opportunityDAO;
     private TalentDAO talentDAO;
     private CategoryDAO categoryDAO;
+    private NotificationService notificationService;
 
     @Override
     public void init() throws ServletException {
         opportunityDAO = new OpportunityDAO();
         talentDAO = new TalentDAO();
         categoryDAO = new CategoryDAO();
+        notificationService = new NotificationService();
     }
 
     @Override
@@ -226,6 +229,11 @@ public class OpportunityServlet extends HttpServlet {
 
         boolean success = opportunityDAO.createOpportunity(opportunity);
         if (success) {
+            notificationService.notifyYouthNewOpportunity(
+                    opportunity.getYouthId(),
+                    opportunity.getOpportunityId(),
+                    opportunity.getTitle()
+            );
             response.sendRedirect(request.getContextPath() + "/opportunity/sent?success=Opportunity sent successfully");
         } else {
             response.sendRedirect(request.getContextPath() + "/opportunity/talents?error=Failed to send opportunity");
@@ -281,6 +289,14 @@ public class OpportunityServlet extends HttpServlet {
         boolean success = opportunityDAO.updateOpportunityStatus(opportunityId, youth.getUserId(), normalizedStatus);
 
         if (success) {
+            Opportunity offer = opportunityDAO.getOpportunityById(opportunityId);
+            if (offer != null) {
+                notificationService.notifyEmployerOpportunityResponse(
+                        offer.getEmployerId(),
+                        offer.getOpportunityId(),
+                        normalizedStatus
+                );
+            }
             response.sendRedirect(request.getContextPath() + "/opportunity/received?success=Opportunity updated");
         } else {
             response.sendRedirect(request.getContextPath() + "/opportunity/received?error=Unable to update opportunity");

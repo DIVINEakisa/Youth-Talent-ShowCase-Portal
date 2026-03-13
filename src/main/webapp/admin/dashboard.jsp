@@ -15,6 +15,8 @@
     Integer approvedTalents = (Integer) request.getAttribute("approvedTalents");
     Integer rejectedTalents = (Integer) request.getAttribute("rejectedTalents");
     Integer pendingReports = (Integer) request.getAttribute("pendingReports");
+    Integer totalOpportunities = (Integer) request.getAttribute("totalOpportunities");
+    Integer pendingOpportunities = (Integer) request.getAttribute("pendingOpportunities");
     List<Talent> topTalents = (List<Talent>) request.getAttribute("topTalents");
 %>
 <!DOCTYPE html>
@@ -91,6 +93,12 @@
                         <span class="badge bg-warning"><%= pendingReports %></span>
                     <% } %>
                 </a>
+                <a href="${pageContext.request.contextPath}/admin/action/opportunities">
+                    <i class="fas fa-briefcase me-2"></i>Opportunities
+                    <% if (pendingOpportunities != null && pendingOpportunities > 0) { %>
+                        <span class="badge bg-warning"><%= pendingOpportunities %></span>
+                    <% } %>
+                </a>
                 <hr class="bg-secondary">
                 <a href="${pageContext.request.contextPath}/dashboard.jsp">
                     <i class="fas fa-home me-2"></i>Back to Portal
@@ -160,6 +168,18 @@
                                     <h2><%= pendingTalents != null ? pendingTalents : 0 %></h2>
                                 </div>
                                 <i class="fas fa-clock"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="stat-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6>Opportunities</h6>
+                                    <h2><%= totalOpportunities != null ? totalOpportunities : 0 %></h2>
+                                </div>
+                                <i class="fas fa-briefcase"></i>
                             </div>
                         </div>
                     </div>

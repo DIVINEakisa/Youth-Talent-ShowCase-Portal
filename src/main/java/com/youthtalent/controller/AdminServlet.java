@@ -1,6 +1,7 @@
 package com.youthtalent.controller;
 
 import com.youthtalent.dao.*;
+import com.youthtalent.model.Opportunity;
 import com.youthtalent.model.Talent;
 import com.youthtalent.model.Report;
 
@@ -18,12 +19,14 @@ public class AdminServlet extends HttpServlet {
     private TalentDAO talentDAO;
     private UserDAO userDAO;
     private ReportDAO reportDAO;
+    private OpportunityDAO opportunityDAO;
 
     @Override
     public void init() throws ServletException {
         talentDAO = new TalentDAO();
         userDAO = new UserDAO();
         reportDAO = new ReportDAO();
+        opportunityDAO = new OpportunityDAO();
     }
 
     @Override
@@ -57,6 +60,9 @@ public class AdminServlet extends HttpServlet {
             case "/reports":
                 showReports(request, response);
                 break;
+            case "/opportunities":
+                showOpportunities(request, response);
+                break;
             default:
                 showDashboard(request, response);
         }
@@ -86,6 +92,9 @@ public class AdminServlet extends HttpServlet {
                 break;
             case "/report/review":
                 reviewReport(request, response);
+                break;
+            case "/opportunity/delete":
+                deleteOpportunity(request, response);
                 break;
             default:
                 response.sendRedirect(request.getContextPath() + "/admin/action/dashboard");
@@ -125,6 +134,8 @@ public class AdminServlet extends HttpServlet {
         int approvedTalents = talentDAO.getCountByStatus("APPROVED");
         int rejectedTalents = talentDAO.getCountByStatus("REJECTED");
         int pendingReports = reportDAO.getPendingReportsCount();
+        int totalOpportunities = opportunityDAO.getTotalOpportunityCount();
+        int pendingOpportunities = opportunityDAO.getPendingOpportunityCount();
         
         // Get top rated talents
         List<Talent> topTalents = talentDAO.getTopRatedTalents(5);
@@ -135,6 +146,8 @@ public class AdminServlet extends HttpServlet {
         request.setAttribute("approvedTalents", approvedTalents);
         request.setAttribute("rejectedTalents", rejectedTalents);
         request.setAttribute("pendingReports", pendingReports);
+        request.setAttribute("totalOpportunities", totalOpportunities);
+        request.setAttribute("pendingOpportunities", pendingOpportunities);
         request.setAttribute("topTalents", topTalents);
         
         request.getRequestDispatcher("/admin/dashboard.jsp").forward(request, response);
@@ -203,6 +216,19 @@ public class AdminServlet extends HttpServlet {
     }
 
     /**
+     * Show opportunities
+     */
+    private void showOpportunities(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String status = request.getParameter("status");
+        List<Opportunity> opportunities = opportunityDAO.getAllOpportunities(status);
+
+        request.setAttribute("opportunities", opportunities);
+        request.setAttribute("selectedStatus", status);
+        request.getRequestDispatcher("/admin/opportunities.jsp").forward(request, response);
+    }
+
+    /**
      * Approve talent
      */
     private void approveTalent(HttpServletRequest request, HttpServletResponse response) 
@@ -264,6 +290,31 @@ public class AdminServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/admin/action/reports?success=Report reviewed successfully");
         } else {
             response.sendRedirect(request.getContextPath() + "/admin/action/reports?error=Failed to review report");
+        }
+    }
+
+    /**
+     * Remove opportunity
+     */
+    private void deleteOpportunity(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        HttpSession session = request.getSession();
+        int adminId = (Integer) session.getAttribute("userId");
+
+        String opportunityIdParam = request.getParameter("opportunityId");
+        String reason = request.getParameter("reason");
+        if (opportunityIdParam == null || opportunityIdParam.isEmpty()) {
+            response.sendRedirect(request.getContextPath() + "/admin/action/opportunities?error=Invalid opportunity ID");
+            return;
+        }
+
+        int opportunityId = Integer.parseInt(opportunityIdParam);
+        boolean success = opportunityDAO.softDeleteOpportunity(opportunityId, adminId, reason);
+
+        if (success) {
+            response.sendRedirect(request.getContextPath() + "/admin/action/opportunities?success=Opportunity removed successfully");
+        } else {
+            response.sendRedirect(request.getContextPath() + "/admin/action/opportunities?error=Failed to remove opportunity");
         }
     }
 }
