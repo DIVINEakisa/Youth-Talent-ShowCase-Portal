@@ -98,6 +98,11 @@
         <servlet-class>com.youthtalent.controller.AdminServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>OpportunityServlet</servlet-name>
+        <servlet-class>com.youthtalent.controller.OpportunityServlet</servlet-class>
+    </servlet>
+
     <!-- Servlet Mappings -->
     <servlet-mapping>
         <servlet-name>AuthServlet</servlet-name>
@@ -122,6 +127,11 @@
     <servlet-mapping>
         <servlet-name>AdminServlet</servlet-name>
         <url-pattern>/admin/action/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>OpportunityServlet</servlet-name>
+        <url-pattern>/opportunity/*</url-pattern>
     </servlet-mapping>
 
 </web-app>

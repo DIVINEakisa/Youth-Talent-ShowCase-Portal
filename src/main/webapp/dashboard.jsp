@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.youthtalent.model.User" %>
 <%@ page import="com.youthtalent.dao.TalentDAO" %>
+<%@ page import="com.youthtalent.dao.OpportunityDAO" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.youthtalent.model.Talent" %>
 <%
@@ -11,6 +12,7 @@
     }
     
     TalentDAO talentDAO = new TalentDAO();
+    OpportunityDAO opportunityDAO = new OpportunityDAO();
     List<Talent> recentTalents = talentDAO.getTopRatedTalents(6);
 %>
 <!DOCTYPE html>
@@ -110,18 +112,33 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h6 class="text-muted">My Talents</h6>
-                                <h3 class="mb-0"><%= talentDAO.getTalentsByUserId(user.getUserId()).size() %></h3>
+                                <% if (user.isEmployer()) { %>
+                                    <h6 class="text-muted">Sent Offers</h6>
+                                    <h3 class="mb-0"><%= opportunityDAO.getOfferCountByEmployer(user.getUserId()) %></h3>
+                                <% } else { %>
+                                    <h6 class="text-muted">My Talents</h6>
+                                    <h3 class="mb-0"><%= talentDAO.getTalentsByUserId(user.getUserId()).size() %></h3>
+                                <% } %>
                             </div>
                             <div class="text-success" style="font-size: 40px;">
-                                <i class="fas fa-folder-open"></i>
+                                <% if (user.isEmployer()) { %>
+                                    <i class="fas fa-paper-plane"></i>
+                                <% } else { %>
+                                    <i class="fas fa-folder-open"></i>
+                                <% } %>
                             </div>
                         </div>
                     </div>
                     <div class="card-footer bg-transparent">
-                        <a href="${pageContext.request.contextPath}/talent/my-talents" class="text-success">
-                            View All <i class="fas fa-arrow-right ms-1"></i>
-                        </a>
+                        <% if (user.isEmployer()) { %>
+                            <a href="${pageContext.request.contextPath}/opportunity/sent" class="text-success">
+                                View Offers <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        <% } else { %>
+                            <a href="${pageContext.request.contextPath}/talent/my-talents" class="text-success">
+                                View All <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        <% } %>
                     </div>
                 </div>
             </div>
@@ -152,18 +169,33 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h6 class="text-muted">Quick Action</h6>
-                                <h6 class="mb-0">Add New Talent</h6>
+                                <% if (user.isEmployer()) { %>
+                                    <h6 class="text-muted">Quick Action</h6>
+                                    <h6 class="mb-0">Browse Approved Talents</h6>
+                                <% } else { %>
+                                    <h6 class="text-muted">Quick Action</h6>
+                                    <h6 class="mb-0">Add New Talent</h6>
+                                <% } %>
                             </div>
                             <div class="text-success" style="font-size: 40px;">
-                                <i class="fas fa-plus-circle"></i>
+                                <% if (user.isEmployer()) { %>
+                                    <i class="fas fa-briefcase"></i>
+                                <% } else { %>
+                                    <i class="fas fa-plus-circle"></i>
+                                <% } %>
                             </div>
                         </div>
                     </div>
                     <div class="card-footer bg-transparent">
-                        <a href="${pageContext.request.contextPath}/talent/add" class="text-success">
-                            Get Started <i class="fas fa-arrow-right ms-1"></i>
-                        </a>
+                        <% if (user.isEmployer()) { %>
+                            <a href="${pageContext.request.contextPath}/opportunity/talents" class="text-success">
+                                Explore Now <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        <% } else { %>
+                            <a href="${pageContext.request.contextPath}/talent/add" class="text-success">
+                                Get Started <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        <% } %>
                     </div>
                 </div>
             </div>

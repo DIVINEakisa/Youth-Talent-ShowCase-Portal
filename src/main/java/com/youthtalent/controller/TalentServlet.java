@@ -157,6 +157,11 @@ public class TalentServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/auth/login");
             return;
         }
+
+        if (isEmployerSession(session)) {
+            response.sendRedirect(request.getContextPath() + "/opportunity/talents?error=Employers cannot manage youth submissions");
+            return;
+        }
         
         int userId = (Integer) session.getAttribute("userId");
         List<Talent> talents = talentDAO.getTalentsByUserId(userId);
@@ -176,6 +181,11 @@ public class TalentServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/auth/login");
             return;
         }
+
+        if (isEmployerSession(session)) {
+            response.sendRedirect(request.getContextPath() + "/opportunity/talents?error=Employers cannot submit talents");
+            return;
+        }
         
         request.setAttribute("categories", categoryDAO.getAllCategories());
         request.getRequestDispatcher("/add-talent.jsp").forward(request, response);
@@ -190,6 +200,11 @@ public class TalentServlet extends HttpServlet {
         
         if (session == null || session.getAttribute("userId") == null) {
             response.sendRedirect(request.getContextPath() + "/auth/login");
+            return;
+        }
+
+        if (isEmployerSession(session)) {
+            response.sendRedirect(request.getContextPath() + "/opportunity/talents?error=Employers cannot edit talents");
             return;
         }
         
@@ -223,6 +238,11 @@ public class TalentServlet extends HttpServlet {
         
         if (session == null || session.getAttribute("userId") == null) {
             response.sendRedirect(request.getContextPath() + "/auth/login");
+            return;
+        }
+
+        if (isEmployerSession(session)) {
+            response.sendRedirect(request.getContextPath() + "/opportunity/talents?error=Employers cannot submit talents");
             return;
         }
         
@@ -282,6 +302,11 @@ public class TalentServlet extends HttpServlet {
         
         if (session == null || session.getAttribute("userId") == null) {
             response.sendRedirect(request.getContextPath() + "/auth/login");
+            return;
+        }
+
+        if (isEmployerSession(session)) {
+            response.sendRedirect(request.getContextPath() + "/opportunity/talents?error=Employers cannot edit talents");
             return;
         }
         
@@ -349,6 +374,11 @@ public class TalentServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/auth/login");
             return;
         }
+
+        if (isEmployerSession(session)) {
+            response.sendRedirect(request.getContextPath() + "/opportunity/talents?error=Employers cannot delete talents");
+            return;
+        }
         
         String talentIdParam = request.getParameter("talentId");
         System.out.println("DEBUG deleteTalent() - talentId param: " + talentIdParam);
@@ -403,5 +433,10 @@ public class TalentServlet extends HttpServlet {
         request.setAttribute("keyword", keyword);
         request.setAttribute("categories", categoryDAO.getAllCategories());
         request.getRequestDispatcher("/talents.jsp").forward(request, response);
+    }
+
+    private boolean isEmployerSession(HttpSession session) {
+        String role = (String) session.getAttribute("role");
+        return "EMPLOYER".equals(role);
     }
 }

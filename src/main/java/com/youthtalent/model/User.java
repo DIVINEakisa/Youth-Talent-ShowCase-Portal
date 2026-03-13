@@ -12,7 +12,7 @@ public class User {
     private String email;
     private String passwordHash;
     private String fullName;
-    private String role; // USER, ADMIN, TALENT_MANAGER
+    private String role; // USER, ADMIN, TALENT_MANAGER, EMPLOYER
     private String profileImage;
     private String bio;
     private Timestamp createdAt;
@@ -131,6 +131,10 @@ public class User {
 
     public boolean isUser() {
         return "USER".equals(role);
+    }
+
+    public boolean isEmployer() {
+        return "EMPLOYER".equals(role);
     }
 
     @Override

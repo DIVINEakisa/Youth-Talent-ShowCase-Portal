@@ -13,6 +13,7 @@ DROP TABLE IF EXISTS user_badges;
 DROP TABLE IF EXISTS reports;
 DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS ratings;
+DROP TABLE IF EXISTS opportunities;
 DROP TABLE IF EXISTS talents;
 DROP TABLE IF EXISTS badges;
 DROP TABLE IF EXISTS categories;
@@ -28,7 +29,7 @@ CREATE TABLE users (
     email VARCHAR(100) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     full_name VARCHAR(100) NOT NULL,
-    role ENUM('USER', 'ADMIN', 'TALENT_MANAGER') DEFAULT 'USER',
+    role ENUM('USER', 'ADMIN', 'TALENT_MANAGER', 'EMPLOYER') DEFAULT 'USER',
     profile_image VARCHAR(255) DEFAULT 'default-avatar.png',
     bio TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -77,6 +78,31 @@ CREATE TABLE talents (
     INDEX idx_status (status),
     INDEX idx_category_id (category_id),
     INDEX idx_created_at (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ============================================================
+-- Table: opportunities
+-- Description: Offers sent by employers to youth talents
+-- ============================================================
+CREATE TABLE opportunities (
+    opportunity_id INT PRIMARY KEY AUTO_INCREMENT,
+    employer_id INT NOT NULL,
+    youth_id INT NOT NULL,
+    talent_id INT NOT NULL,
+    title VARCHAR(200) NOT NULL,
+    description TEXT NOT NULL,
+    type ENUM('JOB', 'SPONSORSHIP', 'COLLABORATION', 'MENTORSHIP') NOT NULL,
+    status ENUM('PENDING', 'ACCEPTED', 'REJECTED') DEFAULT 'PENDING',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    responded_at TIMESTAMP NULL,
+    FOREIGN KEY (employer_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (youth_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (talent_id) REFERENCES talents(talent_id) ON DELETE CASCADE,
+    INDEX idx_employer_id (employer_id),
+    INDEX idx_youth_id (youth_id),
+    INDEX idx_talent_id (talent_id),
+    INDEX idx_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ============================================================
@@ -285,7 +311,8 @@ INSERT INTO users (username, email, password_hash, full_name, role, profile_imag
 ('ryan_martinez', 'ryan@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Ryan Martinez', 'USER', 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400', 'Full-stack developer and open-source contributor'),
 ('olivia_lee', 'olivia@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Olivia Lee', 'USER', 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400', 'Digital artist specializing in character design'),
 ('james_anderson', 'james@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'James Anderson', 'USER', 'https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=400', 'Poet and creative writing instructor'),
-('emma_thomas', 'emma@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Emma Thomas', 'USER', 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400', 'Young entrepreneur building sustainable businesses');
+('emma_thomas', 'emma@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Emma Thomas', 'USER', 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400', 'Young entrepreneur building sustainable businesses'),
+('future_sponsor', 'sponsor@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Future Sponsor', 'EMPLOYER', 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=400', 'Looking for exceptional young talent to sponsor and mentor.');
 
 -- Insert More Talents Across Different Categories
 INSERT INTO talents (user_id, category_id, title, description, image_url, media_url, status, approved_by, approved_at) VALUES

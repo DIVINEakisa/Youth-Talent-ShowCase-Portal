@@ -28,6 +28,7 @@
                     </a>
                 </li>
                 <% if (user != null) { %>
+                <% if (!user.isEmployer()) { %>
                 <li class="nav-item">
                     <a class="nav-link <%= "mytalents".equals(currentPage) ? "active" : "" %>" 
                        href="${pageContext.request.contextPath}/talent/my-talents">
@@ -39,6 +40,28 @@
                         <i class="fas fa-plus-circle me-1"></i>Add Talent
                     </a>
                 </li>
+                <% } %>
+                <% if (user.isEmployer()) { %>
+                <li class="nav-item">
+                    <a class="nav-link <%= "employer-talents".equals(currentPage) ? "active" : "" %>"
+                       href="${pageContext.request.contextPath}/opportunity/talents">
+                        <i class="fas fa-briefcase me-1"></i>Hire Talents
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <%= "sent-offers".equals(currentPage) ? "active" : "" %>"
+                       href="${pageContext.request.contextPath}/opportunity/sent">
+                        <i class="fas fa-paper-plane me-1"></i>Sent Offers
+                    </a>
+                </li>
+                <% } else if (!user.isAdmin()) { %>
+                <li class="nav-item">
+                    <a class="nav-link <%= "received-offers".equals(currentPage) ? "active" : "" %>"
+                       href="${pageContext.request.contextPath}/opportunity/received">
+                        <i class="fas fa-inbox me-1"></i>My Offers
+                    </a>
+                </li>
+                <% } %>
                 <% if (user.isAdmin()) { %>
                 <li class="nav-item">
                     <a class="nav-link <%= "admin".equals(currentPage) ? "active" : "" %>" 

@@ -111,6 +111,8 @@ public class AuthServlet extends HttpServlet {
                 // Redirect based on role
                 if (user.isAdmin()) {
                     response.sendRedirect(request.getContextPath() + "/admin/action/dashboard");
+                } else if (user.isEmployer()) {
+                    response.sendRedirect(request.getContextPath() + "/opportunity/talents");
                 } else {
                     response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
                 }
@@ -138,6 +140,7 @@ public class AuthServlet extends HttpServlet {
         String confirmPassword = request.getParameter("confirmPassword");
         String fullName = request.getParameter("fullName");
         String bio = request.getParameter("bio");
+        String roleParam = request.getParameter("role");
         
         // Validation
         String usernameError = ValidationUtil.validateUsername(username);
@@ -187,7 +190,9 @@ public class AuthServlet extends HttpServlet {
         user.setEmail(email);
         user.setPasswordHash(PasswordUtil.hashPassword(password));
         user.setFullName(fullName);
-        user.setRole("USER");
+        // Only allow self-registration for youth and employer accounts.
+        String role = "EMPLOYER".equalsIgnoreCase(roleParam) ? "EMPLOYER" : "USER";
+        user.setRole(role);
         user.setBio(bio);
         
         boolean success = userDAO.createUser(user);

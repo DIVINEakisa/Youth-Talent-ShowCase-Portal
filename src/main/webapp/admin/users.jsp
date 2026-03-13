@@ -112,8 +112,10 @@
                                             <td>
                                                 <% if ("ADMIN".equals(u.getRole())) { %>
                                                     <span class="badge bg-danger">Admin</span>
+                                                <% } else if ("EMPLOYER".equals(u.getRole())) { %>
+                                                    <span class="badge bg-warning text-dark">Employer</span>
                                                 <% } else { %>
-                                                    <span class="badge bg-primary">User</span>
+                                                    <span class="badge bg-primary">Youth</span>
                                                 <% } %>
                                             </td>
                                             <td><small><%= u.getCreatedAt() %></small></td>

@@ -92,6 +92,16 @@
                                 </label>
                                 <input type="text" class="form-control" id="fullName" name="fullName" required>
                             </div>
+
+                            <div class="mb-3">
+                                <label for="role" class="form-label">
+                                    <i class="fas fa-user-tag me-1"></i> I am joining as *
+                                </label>
+                                <select class="form-select" id="role" name="role" required>
+                                    <option value="USER" selected>Youth Talent</option>
+                                    <option value="EMPLOYER">Employer / Sponsor</option>
+                                </select>
+                            </div>
                             
                             <div class="mb-3">
                                 <label for="password" class="form-label">
