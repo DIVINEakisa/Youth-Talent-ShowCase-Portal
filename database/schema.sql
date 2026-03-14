@@ -324,7 +324,7 @@ INSERT INTO user_badges (user_id, badge_id) VALUES
 -- Additional Sample Data for Realistic Testing
 -- ============================================================
 
--- Insert More Users (Password for all: password123)
+-- Insert More Users (Password for all: password)
 INSERT INTO users (username, email, password_hash, full_name, role, profile_image, bio) VALUES
 ('emily_chen', 'emily@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Emily Chen', 'USER', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400', 'Tech enthusiast and coding wizard'),
 ('michael_brown', 'michael@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Michael Brown', 'USER', 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400', 'Writer and storyteller with a passion for fantasy'),
