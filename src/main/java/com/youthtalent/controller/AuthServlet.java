@@ -113,6 +113,8 @@ public class AuthServlet extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/admin/dashboard");
                 } else if (user.isEmployer()) {
                     response.sendRedirect(request.getContextPath() + "/opportunity/talents");
+                } else if (user.isTalentManager()) {
+                    response.sendRedirect(request.getContextPath() + "/talent/my-talents");
                 } else {
                     response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
                 }
@@ -190,8 +192,15 @@ public class AuthServlet extends HttpServlet {
         user.setEmail(email);
         user.setPasswordHash(PasswordUtil.hashPassword(password));
         user.setFullName(fullName);
-        // Only allow self-registration for youth and employer accounts.
-        String role = "EMPLOYER".equalsIgnoreCase(roleParam) ? "EMPLOYER" : "USER";
+        // Allow self-registration for youth, employer, and talent manager accounts.
+        String role;
+        if ("EMPLOYER".equalsIgnoreCase(roleParam)) {
+            role = "EMPLOYER";
+        } else if ("TALENT_MANAGER".equalsIgnoreCase(roleParam)) {
+            role = "TALENT_MANAGER";
+        } else {
+            role = "USER";
+        }
         user.setRole(role);
         user.setBio(bio);
         

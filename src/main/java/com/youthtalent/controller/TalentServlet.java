@@ -2,6 +2,7 @@ package com.youthtalent.controller;
 
 import com.youthtalent.dao.CategoryDAO;
 import com.youthtalent.dao.TalentDAO;
+import com.youthtalent.dao.UserDAO;
 import com.youthtalent.model.Talent;
 import com.youthtalent.model.User;
 import com.youthtalent.util.ValidationUtil;
@@ -23,11 +24,13 @@ public class TalentServlet extends HttpServlet {
     
     private TalentDAO talentDAO;
     private CategoryDAO categoryDAO;
+    private UserDAO userDAO;
 
     @Override
     public void init() throws ServletException {
         talentDAO = new TalentDAO();
         categoryDAO = new CategoryDAO();
+        userDAO = new UserDAO();
     }
 
     @Override
@@ -164,7 +167,9 @@ public class TalentServlet extends HttpServlet {
         }
         
         int userId = (Integer) session.getAttribute("userId");
-        List<Talent> talents = talentDAO.getTalentsByUserId(userId);
+        List<Talent> talents = isTalentManagerSession(session)
+            ? talentDAO.getTalentsByManagerId(userId)
+            : talentDAO.getTalentsByUserId(userId);
         
         request.setAttribute("talents", talents);
         request.getRequestDispatcher("/my-talents.jsp").forward(request, response);
@@ -188,6 +193,9 @@ public class TalentServlet extends HttpServlet {
         }
         
         request.setAttribute("categories", categoryDAO.getAllCategories());
+        if (isTalentManagerSession(session)) {
+            request.setAttribute("youthUsers", userDAO.getUsersByRole("USER"));
+        }
         request.getRequestDispatcher("/add-talent.jsp").forward(request, response);
     }
 
@@ -219,13 +227,18 @@ public class TalentServlet extends HttpServlet {
         
         // Check ownership
         int userId = (Integer) session.getAttribute("userId");
-        if (talent == null || talent.getUserId() != userId) {
+        boolean canEdit = talent != null && (talent.getUserId() == userId
+            || (isTalentManagerSession(session) && talent.getManagerId() != null && talent.getManagerId() == userId));
+        if (!canEdit) {
             response.sendRedirect(request.getContextPath() + "/talent/my-talents");
             return;
         }
         
         request.setAttribute("talent", talent);
         request.setAttribute("categories", categoryDAO.getAllCategories());
+        if (isTalentManagerSession(session)) {
+            request.setAttribute("youthUsers", userDAO.getUsersByRole("USER"));
+        }
         request.getRequestDispatcher("/edit-talent.jsp").forward(request, response);
     }
 
@@ -247,6 +260,8 @@ public class TalentServlet extends HttpServlet {
         }
         
         int userId = (Integer) session.getAttribute("userId");
+        boolean isManager = isTalentManagerSession(session);
+        String youthIdParam = request.getParameter("youthId");
         String title = request.getParameter("title");
         String description = request.getParameter("description");
         String categoryIdParam = request.getParameter("categoryId");
@@ -260,6 +275,9 @@ public class TalentServlet extends HttpServlet {
         if (validationError != null) {
             request.setAttribute("error", validationError);
             request.setAttribute("categories", categoryDAO.getAllCategories());
+            if (isManager) {
+                request.setAttribute("youthUsers", userDAO.getUsersByRole("USER"));
+            }
             request.getRequestDispatcher("/add-talent.jsp").forward(request, response);
             return;
         }
@@ -268,13 +286,22 @@ public class TalentServlet extends HttpServlet {
         if (mediaUrl != null && !mediaUrl.isEmpty() && !ValidationUtil.isValidURL(mediaUrl)) {
             request.setAttribute("error", "Invalid media URL format");
             request.setAttribute("categories", categoryDAO.getAllCategories());
+            if (isManager) {
+                request.setAttribute("youthUsers", userDAO.getUsersByRole("USER"));
+            }
             request.getRequestDispatcher("/add-talent.jsp").forward(request, response);
             return;
         }
         
         // Create talent
         Talent talent = new Talent();
-        talent.setUserId(userId);
+        if (isManager && ValidationUtil.isNotEmpty(youthIdParam)) {
+            talent.setUserId(Integer.parseInt(youthIdParam));
+            talent.setManagerId(userId);
+        } else {
+            talent.setUserId(userId);
+            talent.setManagerId(null);
+        }
         talent.setTitle(title);
         talent.setDescription(description);
         talent.setCategoryId(categoryId);
@@ -289,6 +316,9 @@ public class TalentServlet extends HttpServlet {
         } else {
             request.setAttribute("error", "Failed to add talent. Please try again.");
             request.setAttribute("categories", categoryDAO.getAllCategories());
+            if (isManager) {
+                request.setAttribute("youthUsers", userDAO.getUsersByRole("USER"));
+            }
             request.getRequestDispatcher("/add-talent.jsp").forward(request, response);
         }
     }
@@ -313,12 +343,15 @@ public class TalentServlet extends HttpServlet {
         String talentIdParam = request.getParameter("talentId");
         int talentId = Integer.parseInt(talentIdParam);
         int userId = (Integer) session.getAttribute("userId");
+        boolean isManager = isTalentManagerSession(session);
         
         // Get existing talent
         Talent existingTalent = talentDAO.getTalentById(talentId);
         
         // Check ownership
-        if (existingTalent == null || existingTalent.getUserId() != userId) {
+        boolean canEdit = existingTalent != null && (existingTalent.getUserId() == userId
+            || (isManager && existingTalent.getManagerId() != null && existingTalent.getManagerId() == userId));
+        if (!canEdit) {
             response.sendRedirect(request.getContextPath() + "/talent/my-talents");
             return;
         }
@@ -328,6 +361,7 @@ public class TalentServlet extends HttpServlet {
         String categoryIdParam = request.getParameter("categoryId");
         String imageUrl = request.getParameter("imageUrl");
         String mediaUrl = request.getParameter("mediaUrl");
+        String youthIdParam = request.getParameter("youthId");
         
         // Validation
         int categoryId = categoryIdParam != null ? Integer.parseInt(categoryIdParam) : 0;
@@ -337,6 +371,9 @@ public class TalentServlet extends HttpServlet {
             request.setAttribute("error", validationError);
             request.setAttribute("talent", existingTalent);
             request.setAttribute("categories", categoryDAO.getAllCategories());
+            if (isManager) {
+                request.setAttribute("youthUsers", userDAO.getUsersByRole("USER"));
+            }
             request.getRequestDispatcher("/edit-talent.jsp").forward(request, response);
             return;
         }
@@ -345,6 +382,10 @@ public class TalentServlet extends HttpServlet {
         existingTalent.setTitle(title);
         existingTalent.setDescription(description);
         existingTalent.setCategoryId(categoryId);
+        if (isManager && ValidationUtil.isNotEmpty(youthIdParam)) {
+            existingTalent.setUserId(Integer.parseInt(youthIdParam));
+            existingTalent.setManagerId(userId);
+        }
         existingTalent.setImageUrl(imageUrl != null && !imageUrl.isEmpty() ? imageUrl : existingTalent.getImageUrl());
         existingTalent.setMediaUrl(mediaUrl);
         
@@ -356,6 +397,9 @@ public class TalentServlet extends HttpServlet {
             request.setAttribute("error", "Failed to update talent. Please try again.");
             request.setAttribute("talent", existingTalent);
             request.setAttribute("categories", categoryDAO.getAllCategories());
+            if (isManager) {
+                request.setAttribute("youthUsers", userDAO.getUsersByRole("USER"));
+            }
             request.getRequestDispatcher("/edit-talent.jsp").forward(request, response);
         }
     }
@@ -391,7 +435,9 @@ public class TalentServlet extends HttpServlet {
         // Get talent to check ownership
         Talent talent = talentDAO.getTalentById(talentId);
         
-        if (talent != null && talent.getUserId() == userId) {
+        boolean canDelete = talent != null && (talent.getUserId() == userId
+            || (isTalentManagerSession(session) && talent.getManagerId() != null && talent.getManagerId() == userId));
+        if (canDelete) {
             System.out.println("DEBUG deleteTalent() - Ownership verified, attempting delete...");
             // Try to delete and check if successful
             boolean deleted = talentDAO.deleteTalent(talentId);
@@ -438,5 +484,10 @@ public class TalentServlet extends HttpServlet {
     private boolean isEmployerSession(HttpSession session) {
         String role = (String) session.getAttribute("role");
         return "EMPLOYER".equals(role);
+    }
+
+    private boolean isTalentManagerSession(HttpSession session) {
+        String role = (String) session.getAttribute("role");
+        return "TALENT_MANAGER".equals(role);
     }
 }

@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 public class Talent {
     private int talentId;
     private int userId;
+    private Integer managerId;
     private int categoryId;
     private String title;
     private String description;
@@ -24,6 +25,7 @@ public class Talent {
 
     // Extended fields (from joins)
     private String username;
+    private String managerName;
     private String categoryName;
     private double averageRating;
     private int totalRatings;
@@ -60,6 +62,14 @@ public class Talent {
 
     public int getCategoryId() {
         return categoryId;
+    }
+
+    public Integer getManagerId() {
+        return managerId;
+    }
+
+    public void setManagerId(Integer managerId) {
+        this.managerId = managerId;
     }
 
     public void setCategoryId(int categoryId) {
@@ -164,6 +174,14 @@ public class Talent {
 
     public String getCategoryName() {
         return categoryName;
+    }
+
+    public String getManagerName() {
+        return managerName;
+    }
+
+    public void setManagerName(String managerName) {
+        this.managerName = managerName;
     }
 
     public void setCategoryName(String categoryName) {

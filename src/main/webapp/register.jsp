@@ -100,6 +100,7 @@
                                 <select class="form-select" id="role" name="role" required>
                                     <option value="USER" selected>Youth Talent</option>
                                     <option value="EMPLOYER">Employer / Sponsor</option>
+                                    <option value="TALENT_MANAGER">Talent Manager</option>
                                 </select>
                             </div>
                             

@@ -143,6 +143,18 @@
                         Please provide a title between 5 and 200 characters.
                     </div>
                 </div>
+                    <% if (session.getAttribute("role") != null && session.getAttribute("role").equals("TALENT_MANAGER")) { %>
+                    <div class="mb-3">
+                        <label for="youthId" class="form-label">Assign to Youth <span class="text-danger">*</span></label>
+                        <select class="form-select" id="youthId" name="youthId" required>
+                            <option value="">Select youth profile...</option>
+                            <c:forEach var="youth" items="${youthUsers}">
+                                <option value="${youth.userId}">${youth.username} (${youth.email})</option>
+                            </c:forEach>
+                        </select>
+                        <div class="form-text">This talent will appear under the selected youth profile and remain managed by you.</div>
+                    </div>
+                    <% } %>
                 
                 <!-- Category -->
                 <div class="mb-4">

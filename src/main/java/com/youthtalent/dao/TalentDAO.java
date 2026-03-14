@@ -19,18 +19,23 @@ public class TalentDAO {
      * @return true if successful
      */
     public boolean createTalent(Talent talent) {
-        String sql = "INSERT INTO talents (user_id, category_id, title, description, image_url, media_url, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO talents (user_id, manager_id, category_id, title, description, image_url, media_url, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             
             stmt.setInt(1, talent.getUserId());
-            stmt.setInt(2, talent.getCategoryId());
-            stmt.setString(3, talent.getTitle());
-            stmt.setString(4, talent.getDescription());
-            stmt.setString(5, talent.getImageUrl());
-            stmt.setString(6, talent.getMediaUrl());
-            stmt.setString(7, talent.getStatus() != null ? talent.getStatus() : "PENDING");
+            if (talent.getManagerId() != null) {
+                stmt.setInt(2, talent.getManagerId());
+            } else {
+                stmt.setNull(2, Types.INTEGER);
+            }
+            stmt.setInt(3, talent.getCategoryId());
+            stmt.setString(4, talent.getTitle());
+            stmt.setString(5, talent.getDescription());
+            stmt.setString(6, talent.getImageUrl());
+            stmt.setString(7, talent.getMediaUrl());
+            stmt.setString(8, talent.getStatus() != null ? talent.getStatus() : "PENDING");
             
             int rowsAffected = stmt.executeUpdate();
             
@@ -54,11 +59,13 @@ public class TalentDAO {
      */
     public Talent getTalentById(int talentId) {
         String sql = "SELECT t.*, u.username, c.category_name, " +
+                     "m.username AS manager_name, " +
                      "COALESCE(AVG(r.rating_value), 0) AS average_rating, " +
                      "COUNT(DISTINCT r.rating_id) AS total_ratings, " +
                      "COUNT(DISTINCT cm.comment_id) AS total_comments " +
                      "FROM talents t " +
                      "JOIN users u ON t.user_id = u.user_id " +
+                     "LEFT JOIN users m ON t.manager_id = m.user_id " +
                      "JOIN categories c ON t.category_id = c.category_id " +
                      "LEFT JOIN ratings r ON t.talent_id = r.talent_id " +
                      "LEFT JOIN comments cm ON t.talent_id = cm.talent_id " +
@@ -96,11 +103,13 @@ public class TalentDAO {
     public List<Talent> getTalentsByStatus(String status) {
         List<Talent> talents = new ArrayList<>();
         String sql = "SELECT t.*, u.username, c.category_name, " +
+                     "m.username AS manager_name, " +
                      "COALESCE(AVG(r.rating_value), 0) AS average_rating, " +
                      "COUNT(DISTINCT r.rating_id) AS total_ratings, " +
                      "COUNT(DISTINCT cm.comment_id) AS total_comments " +
                      "FROM talents t " +
                      "JOIN users u ON t.user_id = u.user_id " +
+                     "LEFT JOIN users m ON t.manager_id = m.user_id " +
                      "JOIN categories c ON t.category_id = c.category_id " +
                      "LEFT JOIN ratings r ON t.talent_id = r.talent_id " +
                      "LEFT JOIN comments cm ON t.talent_id = cm.talent_id " +
@@ -131,11 +140,13 @@ public class TalentDAO {
     public List<Talent> getTalentsByUserId(int userId) {
         List<Talent> talents = new ArrayList<>();
         String sql = "SELECT t.*, u.username, c.category_name, " +
+                     "m.username AS manager_name, " +
                      "COALESCE(AVG(r.rating_value), 0) AS average_rating, " +
                      "COUNT(DISTINCT r.rating_id) AS total_ratings, " +
                      "COUNT(DISTINCT cm.comment_id) AS total_comments " +
                      "FROM talents t " +
                      "JOIN users u ON t.user_id = u.user_id " +
+                     "LEFT JOIN users m ON t.manager_id = m.user_id " +
                      "JOIN categories c ON t.category_id = c.category_id " +
                      "LEFT JOIN ratings r ON t.talent_id = r.talent_id " +
                      "LEFT JOIN comments cm ON t.talent_id = cm.talent_id " +
@@ -158,6 +169,38 @@ public class TalentDAO {
         return talents;
     }
 
+    public List<Talent> getTalentsByManagerId(int managerId) {
+        List<Talent> talents = new ArrayList<>();
+        String sql = "SELECT t.*, u.username, c.category_name, " +
+                "m.username AS manager_name, " +
+                "COALESCE(AVG(r.rating_value), 0) AS average_rating, " +
+                "COUNT(DISTINCT r.rating_id) AS total_ratings, " +
+                "COUNT(DISTINCT cm.comment_id) AS total_comments " +
+                "FROM talents t " +
+                "JOIN users u ON t.user_id = u.user_id " +
+                "LEFT JOIN users m ON t.manager_id = m.user_id " +
+                "JOIN categories c ON t.category_id = c.category_id " +
+                "LEFT JOIN ratings r ON t.talent_id = r.talent_id " +
+                "LEFT JOIN comments cm ON t.talent_id = cm.talent_id " +
+                "WHERE t.manager_id = ? " +
+                "GROUP BY t.talent_id " +
+                "ORDER BY t.created_at DESC";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, managerId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                talents.add(extractTalentFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return talents;
+    }
+
     /**
      * Get talents by category
      * @param categoryId Category ID
@@ -166,11 +209,13 @@ public class TalentDAO {
     public List<Talent> getTalentsByCategory(int categoryId) {
         List<Talent> talents = new ArrayList<>();
         String sql = "SELECT t.*, u.username, c.category_name, " +
+                     "m.username AS manager_name, " +
                      "COALESCE(AVG(r.rating_value), 0) AS average_rating, " +
                      "COUNT(DISTINCT r.rating_id) AS total_ratings, " +
                      "COUNT(DISTINCT cm.comment_id) AS total_comments " +
                      "FROM talents t " +
                      "JOIN users u ON t.user_id = u.user_id " +
+                     "LEFT JOIN users m ON t.manager_id = m.user_id " +
                      "JOIN categories c ON t.category_id = c.category_id " +
                      "LEFT JOIN ratings r ON t.talent_id = r.talent_id " +
                      "LEFT JOIN comments cm ON t.talent_id = cm.talent_id " +
@@ -201,11 +246,13 @@ public class TalentDAO {
     public List<Talent> searchTalents(String keyword) {
         List<Talent> talents = new ArrayList<>();
         String sql = "SELECT t.*, u.username, c.category_name, " +
+                     "m.username AS manager_name, " +
                      "COALESCE(AVG(r.rating_value), 0) AS average_rating, " +
                      "COUNT(DISTINCT r.rating_id) AS total_ratings, " +
                      "COUNT(DISTINCT cm.comment_id) AS total_comments " +
                      "FROM talents t " +
                      "JOIN users u ON t.user_id = u.user_id " +
+                     "LEFT JOIN users m ON t.manager_id = m.user_id " +
                      "JOIN categories c ON t.category_id = c.category_id " +
                      "LEFT JOIN ratings r ON t.talent_id = r.talent_id " +
                      "LEFT JOIN comments cm ON t.talent_id = cm.talent_id " +
@@ -237,17 +284,23 @@ public class TalentDAO {
      * @return true if successful
      */
     public boolean updateTalent(Talent talent) {
-        String sql = "UPDATE talents SET category_id = ?, title = ?, description = ?, image_url = ?, media_url = ? WHERE talent_id = ?";
+        String sql = "UPDATE talents SET user_id = ?, manager_id = ?, category_id = ?, title = ?, description = ?, image_url = ?, media_url = ? WHERE talent_id = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
-            stmt.setInt(1, talent.getCategoryId());
-            stmt.setString(2, talent.getTitle());
-            stmt.setString(3, talent.getDescription());
-            stmt.setString(4, talent.getImageUrl());
-            stmt.setString(5, talent.getMediaUrl());
-            stmt.setInt(6, talent.getTalentId());
+            stmt.setInt(1, talent.getUserId());
+            if (talent.getManagerId() != null) {
+                stmt.setInt(2, talent.getManagerId());
+            } else {
+                stmt.setNull(2, Types.INTEGER);
+            }
+            stmt.setInt(3, talent.getCategoryId());
+            stmt.setString(4, talent.getTitle());
+            stmt.setString(5, talent.getDescription());
+            stmt.setString(6, talent.getImageUrl());
+            stmt.setString(7, talent.getMediaUrl());
+            stmt.setInt(8, talent.getTalentId());
             
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -376,11 +429,13 @@ public class TalentDAO {
     public List<Talent> getTopRatedTalents(int limit) {
         List<Talent> talents = new ArrayList<>();
         String sql = "SELECT t.*, u.username, c.category_name, " +
+                     "m.username AS manager_name, " +
                      "COALESCE(AVG(r.rating_value), 0) AS average_rating, " +
                      "COUNT(DISTINCT r.rating_id) AS total_ratings, " +
                      "COUNT(DISTINCT cm.comment_id) AS total_comments " +
                      "FROM talents t " +
                      "JOIN users u ON t.user_id = u.user_id " +
+                     "LEFT JOIN users m ON t.manager_id = m.user_id " +
                      "JOIN categories c ON t.category_id = c.category_id " +
                      "LEFT JOIN ratings r ON t.talent_id = r.talent_id " +
                      "LEFT JOIN comments cm ON t.talent_id = cm.talent_id " +
@@ -415,6 +470,7 @@ public class TalentDAO {
         Talent talent = new Talent();
         talent.setTalentId(rs.getInt("talent_id"));
         talent.setUserId(rs.getInt("user_id"));
+        talent.setManagerId((Integer) rs.getObject("manager_id"));
         talent.setCategoryId(rs.getInt("category_id"));
         talent.setTitle(rs.getString("title"));
         talent.setDescription(rs.getString("description"));
@@ -433,6 +489,7 @@ public class TalentDAO {
         
         // Extended fields
         talent.setUsername(rs.getString("username"));
+        talent.setManagerName(rs.getString("manager_name"));
         talent.setCategoryName(rs.getString("category_name"));
         talent.setAverageRating(rs.getDouble("average_rating"));
         talent.setTotalRatings(rs.getInt("total_ratings"));

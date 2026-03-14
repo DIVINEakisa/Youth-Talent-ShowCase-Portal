@@ -115,6 +115,9 @@
                                 <% if (user.isEmployer()) { %>
                                     <h6 class="text-muted">Sent Offers</h6>
                                     <h3 class="mb-0"><%= opportunityDAO.getOfferCountByEmployer(user.getUserId()) %></h3>
+                                <% } else if (user.isTalentManager()) { %>
+                                    <h6 class="text-muted">Managed Talents</h6>
+                                    <h3 class="mb-0"><%= talentDAO.getTalentsByManagerId(user.getUserId()).size() %></h3>
                                 <% } else { %>
                                     <h6 class="text-muted">My Talents</h6>
                                     <h3 class="mb-0"><%= talentDAO.getTalentsByUserId(user.getUserId()).size() %></h3>
@@ -123,6 +126,8 @@
                             <div class="text-success" style="font-size: 40px;">
                                 <% if (user.isEmployer()) { %>
                                     <i class="fas fa-paper-plane"></i>
+                                <% } else if (user.isTalentManager()) { %>
+                                    <i class="fas fa-users-cog"></i>
                                 <% } else { %>
                                     <i class="fas fa-folder-open"></i>
                                 <% } %>

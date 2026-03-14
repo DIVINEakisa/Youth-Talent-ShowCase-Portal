@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * Opportunity Servlet
- * Handles employer offers and youth responses
+ * Handles employer offers and recipient responses (youth or talent manager)
  */
 public class OpportunityServlet extends HttpServlet {
 
@@ -214,7 +214,8 @@ public class OpportunityServlet extends HttpServlet {
         if (!("JOB".equals(normalizedType)
                 || "SPONSORSHIP".equals(normalizedType)
                 || "COLLABORATION".equals(normalizedType)
-                || "MENTORSHIP".equals(normalizedType))) {
+                || "MENTORSHIP".equals(normalizedType)
+                || "INTERNSHIP".equals(normalizedType))) {
             response.sendRedirect(request.getContextPath() + "/opportunity/talents?error=Invalid opportunity type");
             return;
         }
@@ -222,6 +223,7 @@ public class OpportunityServlet extends HttpServlet {
         Opportunity opportunity = new Opportunity();
         opportunity.setEmployerId(employer.getUserId());
         opportunity.setYouthId(talent.getUserId());
+        opportunity.setManagerId(talent.getManagerId());
         opportunity.setTalentId(talent.getTalentId());
         opportunity.setTitle(title.trim());
         opportunity.setDescription(description.trim());
@@ -234,6 +236,14 @@ public class OpportunityServlet extends HttpServlet {
                     opportunity.getOpportunityId(),
                     opportunity.getTitle()
             );
+            if (opportunity.getManagerId() != null) {
+                notificationService.notifyManagerNewOpportunity(
+                        opportunity.getManagerId(),
+                        opportunity.getOpportunityId(),
+                        opportunity.getTitle(),
+                        talent.getUsername()
+                );
+            }
             response.sendRedirect(request.getContextPath() + "/opportunity/sent?success=Opportunity sent successfully");
         } else {
             response.sendRedirect(request.getContextPath() + "/opportunity/talents?error=Failed to send opportunity");
@@ -258,8 +268,10 @@ public class OpportunityServlet extends HttpServlet {
             return;
         }
 
-        User youth = (User) request.getSession(false).getAttribute("user");
-        List<Opportunity> opportunities = opportunityDAO.getOpportunitiesForYouth(youth.getUserId());
+        User recipient = (User) request.getSession(false).getAttribute("user");
+        List<Opportunity> opportunities = recipient.isTalentManager()
+            ? opportunityDAO.getOpportunitiesForManager(recipient.getUserId())
+            : opportunityDAO.getOpportunitiesForYouth(recipient.getUserId());
         request.setAttribute("opportunities", opportunities);
         request.getRequestDispatcher("/received-opportunities.jsp").forward(request, response);
     }
@@ -285,8 +297,12 @@ public class OpportunityServlet extends HttpServlet {
         }
 
         int opportunityId = Integer.parseInt(offerIdParam);
-        User youth = (User) request.getSession(false).getAttribute("user");
-        boolean success = opportunityDAO.updateOpportunityStatus(opportunityId, youth.getUserId(), normalizedStatus);
+        User recipient = (User) request.getSession(false).getAttribute("user");
+        boolean success = opportunityDAO.updateOpportunityStatusForRecipient(
+            opportunityId,
+            recipient.getUserId(),
+            normalizedStatus
+        );
 
         if (success) {
             Opportunity offer = opportunityDAO.getOpportunityById(opportunityId);

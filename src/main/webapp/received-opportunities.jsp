@@ -24,7 +24,9 @@
     <%@ include file="includes/navbar.jsp" %>
 
     <div class="container py-4">
-        <h2 class="mb-3"><i class="fas fa-inbox me-2"></i>My Opportunities</h2>
+        <h2 class="mb-3"><i class="fas fa-inbox me-2"></i>
+            <%= user.isTalentManager() ? "Managed Talent Opportunities" : "My Opportunities" %>
+        </h2>
 
         <% if (request.getParameter("success") != null) { %>
             <div class="alert alert-success"><%= request.getParameter("success") %></div>
@@ -52,6 +54,9 @@
                             </p>
                             <p class="mb-2"><strong>From:</strong> <%= opportunity.getEmployerName() %></p>
                             <p class="mb-2"><strong>For Talent:</strong> <%= opportunity.getTalentTitle() %></p>
+                            <% if (user.isTalentManager()) { %>
+                                <p class="mb-2"><strong>Youth:</strong> <%= opportunity.getRecipientUsername() %></p>
+                            <% } %>
                             <p class="card-text"><%= opportunity.getDescription() %></p>
 
                             <% if ("PENDING".equals(opportunity.getStatus())) { %>

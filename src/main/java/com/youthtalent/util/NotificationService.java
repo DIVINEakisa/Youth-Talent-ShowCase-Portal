@@ -51,6 +51,24 @@ public class NotificationService {
         sendEmail(user.getEmail(), subject, body);
     }
 
+    public void notifyManagerNewOpportunity(int managerId, int opportunityId, String opportunityTitle, String youthName) {
+        User user = userDAO.getUserById(managerId);
+        if (user == null || user.getEmail() == null || user.getEmail().isEmpty()) {
+            return;
+        }
+
+        String subject = "New Managed Talent Opportunity";
+        String body = "Hello " + user.getFullName() + ",\n\n"
+                + "A new opportunity has been sent for a youth you manage.\n"
+                + "Youth: " + youthName + "\n"
+                + "Opportunity: " + opportunityTitle + "\n"
+                + "Opportunity ID: " + opportunityId + "\n\n"
+                + "Please log in to review and respond.\n\n"
+                + "Youth Talent Showcase Portal";
+
+        sendEmail(user.getEmail(), subject, body);
+    }
+
     private void sendEmail(String toEmail, String subject, String body) {
         String smtpHost = readConfig("SMTP_HOST");
         String smtpPort = readConfig("SMTP_PORT");

@@ -10,6 +10,7 @@ public class Opportunity {
     private int opportunityId;
     private int employerId;
     private int youthId;
+    private Integer managerId;
     private int talentId;
     private String title;
     private String description;
@@ -22,6 +23,7 @@ public class Opportunity {
     // Extended fields from joins
     private String employerName;
     private String youthName;
+    private String managerName;
     private String talentTitle;
 
     public int getOpportunityId() {
@@ -50,6 +52,14 @@ public class Opportunity {
 
     public int getTalentId() {
         return talentId;
+    }
+
+    public Integer getManagerId() {
+        return managerId;
+    }
+
+    public void setManagerId(Integer managerId) {
+        this.managerId = managerId;
     }
 
     public void setTalentId(int talentId) {
@@ -130,6 +140,14 @@ public class Opportunity {
 
     public String getTalentTitle() {
         return talentTitle;
+    }
+
+    public String getManagerName() {
+        return managerName;
+    }
+
+    public void setManagerName(String managerName) {
+        this.managerName = managerName;
     }
 
     public void setTalentTitle(String talentTitle) {

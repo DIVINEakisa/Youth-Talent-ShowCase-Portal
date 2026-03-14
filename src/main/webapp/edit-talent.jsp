@@ -4,6 +4,7 @@
 <%@ page import="com.youthtalent.model.User" %>
 <%@ page import="com.youthtalent.dao.TalentDAO" %>
 <%@ page import="com.youthtalent.dao.CategoryDAO" %>
+<%@ page import="com.youthtalent.dao.UserDAO" %>
 <%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -117,7 +118,9 @@
     }
     
     // Check if user owns this talent
-    if (talent.getUserId() != user.getUserId() && !user.isAdmin()) {
+        if (talent.getUserId() != user.getUserId()
+            && !(user.isTalentManager() && talent.getManagerId() != null && talent.getManagerId() == user.getUserId())
+            && !user.isAdmin()) {
     %>
         <div class="container mt-5">
             <div class="alert alert-danger">
@@ -181,6 +184,25 @@
             <!-- Form -->
             <form action="${pageContext.request.contextPath}/talent/edit" method="post" id="editTalentForm" novalidate>
                 <input type="hidden" name="talentId" value="<%= talent.getTalentId() %>">
+
+                <% if (user.isTalentManager()) {
+                    UserDAO userDAO = new UserDAO();
+                    List<User> youthUsers = userDAO.getUsersByRole("USER");
+                %>
+                <div class="mb-4">
+                    <label for="youthId" class="form-label required-field">Youth Profile</label>
+                    <select class="form-select form-select-lg" id="youthId" name="youthId" required>
+                        <option value="">Select youth profile...</option>
+                        <% for (User youth : youthUsers) {
+                            String selected = youth.getUserId() == talent.getUserId() ? "selected" : "";
+                        %>
+                        <option value="<%= youth.getUserId() %>" <%= selected %>>
+                            <%= youth.getUsername() %> (<%= youth.getEmail() %>)
+                        </option>
+                        <% } %>
+                    </select>
+                </div>
+                <% } %>
                 
                 <!-- Title -->
                 <div class="mb-4">

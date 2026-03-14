@@ -60,6 +60,7 @@ CREATE TABLE categories (
 CREATE TABLE talents (
     talent_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT NOT NULL,
+    manager_id INT NULL,
     category_id INT NOT NULL,
     title VARCHAR(200) NOT NULL,
     description TEXT NOT NULL,
@@ -73,6 +74,7 @@ CREATE TABLE talents (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     views_count INT DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (manager_id) REFERENCES users(user_id) ON DELETE SET NULL,
     FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE RESTRICT,
     FOREIGN KEY (approved_by) REFERENCES users(user_id) ON DELETE SET NULL,
     INDEX idx_user_id (user_id),
@@ -89,10 +91,11 @@ CREATE TABLE opportunities (
     opportunity_id INT PRIMARY KEY AUTO_INCREMENT,
     employer_id INT NOT NULL,
     youth_id INT NOT NULL,
+    manager_id INT NULL,
     talent_id INT NOT NULL,
     title VARCHAR(200) NOT NULL,
     description TEXT NOT NULL,
-    type ENUM('JOB', 'SPONSORSHIP', 'COLLABORATION', 'MENTORSHIP') NOT NULL,
+    type ENUM('JOB', 'SPONSORSHIP', 'COLLABORATION', 'INTERNSHIP', 'MENTORSHIP') NOT NULL,
     status ENUM('PENDING', 'ACCEPTED', 'REJECTED') DEFAULT 'PENDING',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -102,10 +105,12 @@ CREATE TABLE opportunities (
     deleted_by INT NULL,
     FOREIGN KEY (employer_id) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (youth_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (manager_id) REFERENCES users(user_id) ON DELETE SET NULL,
     FOREIGN KEY (talent_id) REFERENCES talents(talent_id) ON DELETE CASCADE,
     FOREIGN KEY (deleted_by) REFERENCES users(user_id) ON DELETE SET NULL,
     INDEX idx_employer_id (employer_id),
     INDEX idx_youth_id (youth_id),
+    INDEX idx_manager_id (manager_id),
     INDEX idx_talent_id (talent_id),
     INDEX idx_status (status),
     INDEX idx_is_deleted (is_deleted)
@@ -332,6 +337,10 @@ INSERT INTO users (username, email, password_hash, full_name, role, profile_imag
 ('james_anderson', 'james@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'James Anderson', 'USER', 'https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=400', 'Poet and creative writing instructor'),
 ('emma_thomas', 'emma@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Emma Thomas', 'USER', 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400', 'Young entrepreneur building sustainable businesses'),
 ('future_sponsor', 'sponsor@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Future Sponsor', 'EMPLOYER', 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=400', 'Looking for exceptional young talent to sponsor and mentor.');
+
+-- Assign sample manager to a subset of youth talents
+-- mike_talent has user_id = 4 in seeded data
+UPDATE talents SET manager_id = 4 WHERE user_id IN (2, 3);
 
 -- Insert More Talents Across Different Categories
 INSERT INTO talents (user_id, category_id, title, description, image_url, media_url, status, approved_by, approved_at) VALUES

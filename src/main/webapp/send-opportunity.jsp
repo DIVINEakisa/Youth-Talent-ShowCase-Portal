@@ -55,6 +55,7 @@
                                     <option value="SPONSORSHIP">Sponsorship</option>
                                     <option value="COLLABORATION">Collaboration</option>
                                     <option value="MENTORSHIP">Mentorship</option>
+                                    <option value="INTERNSHIP">Internship</option>
                                 </select>
                             </div>
 
