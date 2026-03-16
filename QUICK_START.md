@@ -190,7 +190,7 @@ After successful setup:
 
 ### User Pages (After Login)
 - **Dashboard**: `http://localhost:8080/YouthTalent/dashboard.jsp`
-- **My Talents**: `http://localhost:8080/YouthTalent/my-talents.jsp`
+- **My Talents**: `http://localhost:8080/YouthTalent/talent/my-talents`
 - **Add Talent**: `http://localhost:8080/YouthTalent/add-talent.jsp`
 
 ### Admin Pages (Admin Only)

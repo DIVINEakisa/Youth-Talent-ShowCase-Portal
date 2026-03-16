@@ -105,6 +105,12 @@
         response.sendRedirect(request.getContextPath() + "/auth/login");
         return;
     }
+
+    // Prevent direct JSP access from bypassing servlet data loading.
+    if (request.getAttribute("talents") == null) {
+        response.sendRedirect(request.getContextPath() + "/talent/my-talents");
+        return;
+    }
     %>
     <%@ include file="includes/navbar.jsp" %>
     <% 
