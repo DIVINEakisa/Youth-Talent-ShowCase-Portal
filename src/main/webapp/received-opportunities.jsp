@@ -55,7 +55,7 @@
                             <p class="mb-2"><strong>From:</strong> <%= opportunity.getEmployerName() %></p>
                             <p class="mb-2"><strong>For Talent:</strong> <%= opportunity.getTalentTitle() %></p>
                             <% if (user.isTalentManager()) { %>
-                                <p class="mb-2"><strong>Youth:</strong> <%= opportunity.getRecipientUsername() %></p>
+                                <p class="mb-2"><strong>Youth:</strong> <%= opportunity.getYouthName() %></p>
                             <% } %>
                             <p class="card-text"><%= opportunity.getDescription() %></p>
 
