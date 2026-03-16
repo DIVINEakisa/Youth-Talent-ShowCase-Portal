@@ -13,6 +13,8 @@ import java.util.List;
  */
 public class TalentDAO {
 
+    private static volatile Boolean managerIdColumnExists;
+
     private static final String BASE_SELECT_WITH_STATS =
             "SELECT t.*, u.username, c.category_name, " +
             "m.username AS manager_name, " +
@@ -30,23 +32,34 @@ public class TalentDAO {
      * @return true if successful
      */
     public boolean createTalent(Talent talent) {
-        String sql = "INSERT INTO talents (user_id, manager_id, category_id, title, description, image_url, media_url, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement stmt = conn.prepareStatement(
+                     hasManagerIdColumn(conn)
+                             ? "INSERT INTO talents (user_id, manager_id, category_id, title, description, image_url, media_url, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+                             : "INSERT INTO talents (user_id, category_id, title, description, image_url, media_url, status) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                     Statement.RETURN_GENERATED_KEYS)) {
             
             stmt.setInt(1, talent.getUserId());
-            if (talent.getManagerId() != null) {
-                stmt.setInt(2, talent.getManagerId());
+            if (hasManagerIdColumn(conn)) {
+                if (talent.getManagerId() != null) {
+                    stmt.setInt(2, talent.getManagerId());
+                } else {
+                    stmt.setNull(2, Types.INTEGER);
+                }
+                stmt.setInt(3, talent.getCategoryId());
+                stmt.setString(4, talent.getTitle());
+                stmt.setString(5, talent.getDescription());
+                stmt.setString(6, talent.getImageUrl());
+                stmt.setString(7, talent.getMediaUrl());
+                stmt.setString(8, talent.getStatus() != null ? talent.getStatus() : "PENDING");
             } else {
-                stmt.setNull(2, Types.INTEGER);
+                stmt.setInt(2, talent.getCategoryId());
+                stmt.setString(3, talent.getTitle());
+                stmt.setString(4, talent.getDescription());
+                stmt.setString(5, talent.getImageUrl());
+                stmt.setString(6, talent.getMediaUrl());
+                stmt.setString(7, talent.getStatus() != null ? talent.getStatus() : "PENDING");
             }
-            stmt.setInt(3, talent.getCategoryId());
-            stmt.setString(4, talent.getTitle());
-            stmt.setString(5, talent.getDescription());
-            stmt.setString(6, talent.getImageUrl());
-            stmt.setString(7, talent.getMediaUrl());
-            stmt.setString(8, talent.getStatus() != null ? talent.getStatus() : "PENDING");
             
             int rowsAffected = stmt.executeUpdate();
             
@@ -69,11 +82,9 @@ public class TalentDAO {
      * @return Talent object or null
      */
     public Talent getTalentById(int talentId) {
-        String sql = BASE_SELECT_WITH_STATS +
-                     "WHERE t.talent_id = ?";
-        
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(
+                     buildBaseSelectWithStats(conn) + "WHERE t.talent_id = ?")) {
             
             stmt.setInt(1, talentId);
             ResultSet rs = stmt.executeQuery();
@@ -102,12 +113,10 @@ public class TalentDAO {
      */
     public List<Talent> getTalentsByStatus(String status) {
         List<Talent> talents = new ArrayList<>();
-        String sql = BASE_SELECT_WITH_STATS +
-                     "WHERE t.status = ? " +
-                     "ORDER BY t.created_at DESC";
-        
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(
+                 buildBaseSelectWithStats(conn) +
+                     "WHERE t.status = ? ORDER BY t.created_at DESC")) {
             
             stmt.setString(1, status);
             ResultSet rs = stmt.executeQuery();
@@ -128,12 +137,10 @@ public class TalentDAO {
      */
     public List<Talent> getTalentsByUserId(int userId) {
         List<Talent> talents = new ArrayList<>();
-        String sql = BASE_SELECT_WITH_STATS +
-                     "WHERE t.user_id = ? " +
-                     "ORDER BY t.created_at DESC";
-        
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(
+                 buildBaseSelectWithStats(conn) +
+                     "WHERE t.user_id = ? ORDER BY t.created_at DESC")) {
             
             stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
@@ -149,12 +156,14 @@ public class TalentDAO {
 
     public List<Talent> getTalentsByManagerId(int managerId) {
         List<Talent> talents = new ArrayList<>();
-        String sql = BASE_SELECT_WITH_STATS +
-            "WHERE t.manager_id = ? " +
-            "ORDER BY t.created_at DESC";
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            if (!hasManagerIdColumn(conn)) {
+            return talents;
+            }
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            String sql = buildBaseSelectWithStats(conn) +
+                "WHERE t.manager_id = ? ORDER BY t.created_at DESC";
+            PreparedStatement stmt = conn.prepareStatement(sql);
 
             stmt.setInt(1, managerId);
             ResultSet rs = stmt.executeQuery();
@@ -162,6 +171,7 @@ public class TalentDAO {
             while (rs.next()) {
                 talents.add(extractTalentFromResultSet(rs));
             }
+            stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -175,12 +185,10 @@ public class TalentDAO {
      */
     public List<Talent> getTalentsByCategory(int categoryId) {
         List<Talent> talents = new ArrayList<>();
-        String sql = BASE_SELECT_WITH_STATS +
-                     "WHERE t.category_id = ? AND t.status = 'APPROVED' " +
-                     "ORDER BY t.created_at DESC";
-        
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(
+                 buildBaseSelectWithStats(conn) +
+                     "WHERE t.category_id = ? AND t.status = 'APPROVED' ORDER BY t.created_at DESC")) {
             
             stmt.setInt(1, categoryId);
             ResultSet rs = stmt.executeQuery();
@@ -201,12 +209,10 @@ public class TalentDAO {
      */
     public List<Talent> searchTalents(String keyword) {
         List<Talent> talents = new ArrayList<>();
-        String sql = BASE_SELECT_WITH_STATS +
-                     "WHERE t.status = 'APPROVED' AND (t.title LIKE ? OR t.description LIKE ? OR c.category_name LIKE ?) " +
-                     "ORDER BY t.created_at DESC";
-        
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(
+                 buildBaseSelectWithStats(conn) +
+                     "WHERE t.status = 'APPROVED' AND (t.title LIKE ? OR t.description LIKE ? OR c.category_name LIKE ?) ORDER BY t.created_at DESC")) {
             
             String searchPattern = "%" + keyword + "%";
             stmt.setString(1, searchPattern);
@@ -229,23 +235,33 @@ public class TalentDAO {
      * @return true if successful
      */
     public boolean updateTalent(Talent talent) {
-        String sql = "UPDATE talents SET user_id = ?, manager_id = ?, category_id = ?, title = ?, description = ?, image_url = ?, media_url = ? WHERE talent_id = ?";
-        
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(
+                     hasManagerIdColumn(conn)
+                             ? "UPDATE talents SET user_id = ?, manager_id = ?, category_id = ?, title = ?, description = ?, image_url = ?, media_url = ? WHERE talent_id = ?"
+                             : "UPDATE talents SET user_id = ?, category_id = ?, title = ?, description = ?, image_url = ?, media_url = ? WHERE talent_id = ?")) {
             
             stmt.setInt(1, talent.getUserId());
-            if (talent.getManagerId() != null) {
-                stmt.setInt(2, talent.getManagerId());
+            if (hasManagerIdColumn(conn)) {
+                if (talent.getManagerId() != null) {
+                    stmt.setInt(2, talent.getManagerId());
+                } else {
+                    stmt.setNull(2, Types.INTEGER);
+                }
+                stmt.setInt(3, talent.getCategoryId());
+                stmt.setString(4, talent.getTitle());
+                stmt.setString(5, talent.getDescription());
+                stmt.setString(6, talent.getImageUrl());
+                stmt.setString(7, talent.getMediaUrl());
+                stmt.setInt(8, talent.getTalentId());
             } else {
-                stmt.setNull(2, Types.INTEGER);
+                stmt.setInt(2, talent.getCategoryId());
+                stmt.setString(3, talent.getTitle());
+                stmt.setString(4, talent.getDescription());
+                stmt.setString(5, talent.getImageUrl());
+                stmt.setString(6, talent.getMediaUrl());
+                stmt.setInt(7, talent.getTalentId());
             }
-            stmt.setInt(3, talent.getCategoryId());
-            stmt.setString(4, talent.getTitle());
-            stmt.setString(5, talent.getDescription());
-            stmt.setString(6, talent.getImageUrl());
-            stmt.setString(7, talent.getMediaUrl());
-            stmt.setInt(8, talent.getTalentId());
             
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -373,14 +389,12 @@ public class TalentDAO {
      */
     public List<Talent> getTopRatedTalents(int limit) {
         List<Talent> talents = new ArrayList<>();
-        String sql = BASE_SELECT_WITH_STATS +
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(
+                 buildBaseSelectWithStats(conn) +
                      "WHERE t.status = 'APPROVED' " +
                      "AND (SELECT COUNT(*) FROM ratings r WHERE r.talent_id = t.talent_id) > 0 " +
-                     "ORDER BY average_rating DESC, total_ratings DESC " +
-                     "LIMIT ?";
-        
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                     "ORDER BY average_rating DESC, total_ratings DESC LIMIT ?")) {
             
             stmt.setInt(1, limit);
             ResultSet rs = stmt.executeQuery();
@@ -404,7 +418,7 @@ public class TalentDAO {
         Talent talent = new Talent();
         talent.setTalentId(rs.getInt("talent_id"));
         talent.setUserId(rs.getInt("user_id"));
-        talent.setManagerId((Integer) rs.getObject("manager_id"));
+        talent.setManagerId(getNullableInt(rs, "manager_id"));
         talent.setCategoryId(rs.getInt("category_id"));
         talent.setTitle(rs.getString("title"));
         talent.setDescription(rs.getString("description"));
@@ -423,7 +437,7 @@ public class TalentDAO {
         
         // Extended fields
         talent.setUsername(rs.getString("username"));
-        talent.setManagerName(rs.getString("manager_name"));
+        talent.setManagerName(getNullableString(rs, "manager_name"));
         talent.setCategoryName(rs.getString("category_name"));
         talent.setAverageRating(rs.getDouble("average_rating"));
         talent.setTotalRatings(rs.getInt("total_ratings"));
@@ -440,5 +454,58 @@ public class TalentDAO {
         }
         
         return talent;
+    }
+
+    private String buildBaseSelectWithStats(Connection conn) throws SQLException {
+        if (hasManagerIdColumn(conn)) {
+            return BASE_SELECT_WITH_STATS;
+        }
+
+        return "SELECT t.*, u.username, c.category_name, " +
+                "NULL AS manager_name, " +
+                "COALESCE((SELECT AVG(r.rating_value) FROM ratings r WHERE r.talent_id = t.talent_id), 0) AS average_rating, " +
+                "COALESCE((SELECT COUNT(*) FROM ratings r WHERE r.talent_id = t.talent_id), 0) AS total_ratings, " +
+                "COALESCE((SELECT COUNT(*) FROM comments cm WHERE cm.talent_id = t.talent_id), 0) AS total_comments " +
+                "FROM talents t " +
+                "JOIN users u ON t.user_id = u.user_id " +
+                "JOIN categories c ON t.category_id = c.category_id ";
+    }
+
+    private boolean hasManagerIdColumn(Connection conn) {
+        if (managerIdColumnExists != null) {
+            return managerIdColumnExists;
+        }
+
+        try {
+            DatabaseMetaData metaData = conn.getMetaData();
+            try (ResultSet columns = metaData.getColumns(conn.getCatalog(), null, "talents", "manager_id")) {
+                managerIdColumnExists = columns.next();
+            }
+            if (!Boolean.TRUE.equals(managerIdColumnExists)) {
+                try (ResultSet columns = metaData.getColumns(conn.getCatalog(), null, "TALENTS", "MANAGER_ID")) {
+                    managerIdColumnExists = columns.next();
+                }
+            }
+        } catch (SQLException e) {
+            managerIdColumnExists = false;
+        }
+
+        return managerIdColumnExists;
+    }
+
+    private Integer getNullableInt(ResultSet rs, String columnName) {
+        try {
+            return (Integer) rs.getObject(columnName);
+        } catch (SQLException ignored) {
+            return null;
+        }
+    }
+
+    private String getNullableString(ResultSet rs, String columnName) {
+        try {
+            return rs.getString(columnName);
+        } catch (SQLException ignored) {
+            return null;
+        }
     }
 }

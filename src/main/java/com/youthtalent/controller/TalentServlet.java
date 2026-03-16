@@ -167,9 +167,13 @@ public class TalentServlet extends HttpServlet {
         }
         
         int userId = (Integer) session.getAttribute("userId");
+        String role = (String) session.getAttribute("role");
         List<Talent> talents = isTalentManagerSession(session)
             ? talentDAO.getTalentsByManagerId(userId)
             : talentDAO.getTalentsByUserId(userId);
+
+        System.out.println("DEBUG viewMyTalents() - userId=" + userId + ", role=" + role
+                + ", talentsFound=" + (talents != null ? talents.size() : -1));
         
         request.setAttribute("talents", talents);
         request.getRequestDispatcher("/my-talents.jsp").forward(request, response);
