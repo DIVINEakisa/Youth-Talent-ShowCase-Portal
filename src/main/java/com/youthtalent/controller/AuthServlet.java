@@ -110,11 +110,11 @@ public class AuthServlet extends HttpServlet {
                 
                 // Redirect based on role
                 if (user.isAdmin()) {
-                    response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+                    response.sendRedirect(request.getContextPath() + "/admin/action/dashboard");
                 } else if (user.isEmployer()) {
                     response.sendRedirect(request.getContextPath() + "/opportunity/talents");
                 } else if (user.isTalentManager()) {
-                    response.sendRedirect(request.getContextPath() + "/manager-dashboard.jsp");
+                    response.sendRedirect(request.getContextPath() + "/talent/my-talents");
                 } else {
                     response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
                 }

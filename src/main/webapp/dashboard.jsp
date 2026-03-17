@@ -12,7 +12,7 @@
     }
 
     if (user.isTalentManager()) {
-        response.sendRedirect(request.getContextPath() + "/manager-dashboard.jsp");
+        response.sendRedirect(request.getContextPath() + "/talent/my-talents");
         return;
     }
     

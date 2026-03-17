@@ -9,7 +9,7 @@
         } else if (user.isEmployer()) {
             homePath = request.getContextPath() + "/opportunity/talents";
         } else if (user.isTalentManager()) {
-            homePath = request.getContextPath() + "/manager-dashboard.jsp";
+            homePath = request.getContextPath() + "/talent/my-talents";
         }
     }
 %>
@@ -42,12 +42,12 @@
                 <li class="nav-item">
                     <a class="nav-link <%= "mytalents".equals(currentPage) ? "active" : "" %>" 
                        href="${pageContext.request.contextPath}/talent/my-talents">
-                        <i class="fas fa-folder me-1"></i>My Talents
+                        <i class="fas fa-folder me-1"></i><%= user.isTalentManager() ? "All Talents" : "My Talents" %>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="${pageContext.request.contextPath}/talent/add">
-                        <i class="fas fa-plus-circle me-1"></i>Add Talent
+                        <i class="fas fa-plus-circle me-1"></i><%= user.isTalentManager() ? "Add Youth Talent" : "Add Talent" %>
                     </a>
                 </li>
                 <% } %>
@@ -68,7 +68,7 @@
                 <li class="nav-item">
                     <a class="nav-link <%= "received-offers".equals(currentPage) ? "active" : "" %>"
                        href="${pageContext.request.contextPath}/opportunity/received">
-                        <i class="fas fa-inbox me-1"></i>My Offers
+                        <i class="fas fa-inbox me-1"></i><%= user.isTalentManager() ? "Routed Offers" : "My Offers" %>
                     </a>
                 </li>
                 <% } %>
