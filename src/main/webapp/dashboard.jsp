@@ -10,6 +10,11 @@
         response.sendRedirect(request.getContextPath() + "/auth/login");
         return;
     }
+
+    if (user.isTalentManager()) {
+        response.sendRedirect(request.getContextPath() + "/manager-dashboard.jsp");
+        return;
+    }
     
     TalentDAO talentDAO = new TalentDAO();
     OpportunityDAO opportunityDAO = new OpportunityDAO();

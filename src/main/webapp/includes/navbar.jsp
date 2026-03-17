@@ -2,10 +2,20 @@
 <%
     // User variable is expected to be declared in the parent JSP
     String currentPage = request.getParameter("page") != null ? request.getParameter("page") : "";
+    String homePath = request.getContextPath() + "/dashboard.jsp";
+    if (user != null) {
+        if (user.isAdmin()) {
+            homePath = request.getContextPath() + "/admin/action/dashboard";
+        } else if (user.isEmployer()) {
+            homePath = request.getContextPath() + "/opportunity/talents";
+        } else if (user.isTalentManager()) {
+            homePath = request.getContextPath() + "/manager-dashboard.jsp";
+        }
+    }
 %>
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #198754;">
     <div class="container-fluid">
-        <a class="navbar-brand" href="${pageContext.request.contextPath}/dashboard.jsp">
+        <a class="navbar-brand" href="<%= homePath %>">
             <i class="fas fa-star me-2"></i>Youth Talent Portal
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -16,7 +26,7 @@
                 <% if (user != null) { %>
                 <li class="nav-item">
                     <a class="nav-link <%= "dashboard".equals(currentPage) ? "active" : "" %>" 
-                       href="${pageContext.request.contextPath}/dashboard.jsp">
+                       href="<%= homePath %>">
                         <i class="fas fa-home me-1"></i>Dashboard
                     </a>
                 </li>

@@ -114,7 +114,7 @@ public class AuthServlet extends HttpServlet {
                 } else if (user.isEmployer()) {
                     response.sendRedirect(request.getContextPath() + "/opportunity/talents");
                 } else if (user.isTalentManager()) {
-                    response.sendRedirect(request.getContextPath() + "/talent/my-talents");
+                    response.sendRedirect(request.getContextPath() + "/manager-dashboard.jsp");
                 } else {
                     response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
                 }
